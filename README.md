@@ -2,6 +2,8 @@
 
 Despues de realizar el clone 
 - composer install
+- php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
+- php artisan jwt:secret
 - composer dump-autoload
 
 ## Contributing
