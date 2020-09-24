@@ -48,33 +48,34 @@ if (!function_exists('msgErrorQuery')) {
 
 if (!function_exists('queryErrorParse')) {
     function queryErrorParse(Illuminate\Database\QueryException $e) {
-        $error = new stdClass();
+        $error = [];
         // Verificamos que exista un error parseado con ## ## objeto
         $msg = utf8_decode($e->getMessage());
         $vmsg = explode('##', $msg);
         if (count($vmsg) > 1) {
             $temp = json_decode(preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $vmsg[1]), true);
             if (!is_null($temp))
-                $error->msg = $temp;
+                $error['msg'] = $temp;
             else
-                $error->msg = [$vmsg[1]];
+                $error['msg'] = [$vmsg[1]];
         } else {
-            $error->msg = ["ERROR: contactese con el administrador del sistema ",
+            $error['msg'] = ["ERROR: contactese con el administrador del sistema ",
                 "CODIGO: " . $e->getCode()
             ];
         }
-        $error->error = true;
-        $error->dev = $e->getMessage();
-        $error->params = $e->getBindings();
-        $error->code = 461;
-        $error->debug = Config::get('app.debug');
+        $error['error'] = true;
+        $error['dev'] = $e->getMessage();
+        $error['params'] = $e->getBindings();
+        $error['code'] = 461;
+        $error['debug'] = Config::get('app.debug');
         return $error;
     }
 }
 if (!function_exists('errorException')) {
-    function errorException(Exception $e) {
+    function errorException(\Exception $e) {
         $error = new stdClass();
         $error->error = true;
+        return $error;
         $error->msg = ['Ocurrio un error de tipo ' . $e->getCode()];
         $error->dev = $e->getMessage();
         $error->params = [];

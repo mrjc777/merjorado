@@ -25,4 +25,12 @@ Route::group([
 
 Route::group(['middleware' => ['jwt.verify', 'api']], function ($router) {
     Route::get('menus', 'ApiController@menus');
+    Route::resource('unidadmedida', 'UnidadMedidaController');
+    Route::resource('partidas', 'PartidaArancelariaController');
+
+    Route::resource('almacenes', 'AlmacenController');
+    Route::resource('insumos', 'InsumoController');
+    Route::resource('productos', 'ProductoController');
 });
+
+Route::resource('empresas', 'EmpresaController');

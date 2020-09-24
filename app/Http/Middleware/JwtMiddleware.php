@@ -19,7 +19,7 @@ class JwtMiddleware extends BaseMiddleware {
     public function handle($request, Closure $next) {
         try {
             $user = JWTAuth::parseToken()->authenticate();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $error = new \stdClass();
             $error->dev = $e->getMessage();
             $error->params = [];

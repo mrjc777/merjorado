@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a1ed19c0-ba87-4a77-aba5-bc016a493d73" name="Default Changelist" comment="" />
+    <list default="true" id="a1ed19c0-ba87-4a77-aba5-bc016a493d73" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Help.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Help.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Middleware/JwtMiddleware.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Middleware/JwtMiddleware.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/jwt.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/jwt.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
+  <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
     <execution />
   </component>
@@ -15,6 +22,9 @@
     <colors>
       <entry key="763fe4b6-e278-4afd-85b5-d72f4715391b" value="Violet" />
     </colors>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="PackageJsonUpdateNotifier">
     <dismissed value="$PROJECT_DIR$/package.json" />
@@ -139,12 +149,20 @@
     <property name="DatabaseDriversLRU" value="postgresql" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/Http" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Consultoria VCI\Accesos JWT\jwtLaravel" />
       <recent name="D:\xampp\htdocs\ritex\app\Http" />
     </key>
   </component>
@@ -163,6 +181,19 @@
       <option name="presentableId" value="Default" />
       <updated>1599232887763</updated>
       <workItem from="1599232889004" duration="14916000" />
+      <workItem from="1599766813656" duration="4570000" />
+      <workItem from="1599857664506" duration="3280000" />
+      <workItem from="1600264840097" duration="483000" />
+      <workItem from="1600265352571" duration="15417000" />
+      <workItem from="1600350049326" duration="10060000" />
+      <workItem from="1600434714326" duration="2252000" />
+      <workItem from="1600541338711" duration="716000" />
+      <workItem from="1600651690321" duration="1192000" />
+      <workItem from="1600719958491" duration="424000" />
+      <workItem from="1600720401918" duration="37000" />
+      <workItem from="1600720517544" duration="42000" />
+      <workItem from="1600720576059" duration="309000" />
+      <workItem from="1600722284505" duration="7557000" />
     </task>
     <servers />
   </component>
@@ -182,9 +213,17 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="632" y="84" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1599249020719" />
+    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1600734969338">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1920.1040/1920.0.1280.984@0.0.1920.1040" timestamp="1600734969338" />
     <state x="739" y="275" key="FileChooserDialogImpl" timestamp="1599247617012">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="739" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1599247617012" />
+    <state x="461" y="164" key="SettingsEditor" timestamp="1600732683465">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="461" y="164" key="SettingsEditor/0.0.1920.1040/1920.0.1280.984@0.0.1920.1040" timestamp="1600732683465" />
   </component>
 </project>
