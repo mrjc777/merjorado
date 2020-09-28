@@ -3,10 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="a1ed19c0-ba87-4a77-aba5-bc016a493d73" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Help.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Help.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Middleware/JwtMiddleware.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Middleware/JwtMiddleware.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/jwt.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/jwt.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -194,6 +190,8 @@
       <workItem from="1600720517544" duration="42000" />
       <workItem from="1600720576059" duration="309000" />
       <workItem from="1600722284505" duration="7557000" />
+      <workItem from="1600995296067" duration="710000" />
+      <workItem from="1601218154753" duration="1839000" />
     </task>
     <servers />
   </component>
