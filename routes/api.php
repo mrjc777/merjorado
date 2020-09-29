@@ -31,6 +31,12 @@ Route::group(['middleware' => ['jwt.verify', 'api']], function ($router) {
     Route::resource('almacenes', 'AlmacenController');
     Route::resource('insumos', 'InsumoController');
     Route::resource('productos', 'ProductoController');
+
+    /** MODULO DE APERACIONES SOLICITUD DE MODIFICACION*/
+    Route::get('solModificacion', 'SolicitudController@solModificacion');
+    Route::post('solModificacion', 'SolicitudController@postSolModificacion');
+    Route::post('deletesolModificacion', 'SolicitudController@postDeleteSolModificacion');
+    /** FI MODULO DE OPERACIONES */
 });
 
 Route::resource('empresas', 'EmpresaController');

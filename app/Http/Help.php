@@ -27,6 +27,7 @@ if (!function_exists('getAuthh')) {
             $response->username = $resp->username;
             $response->idsro = $resp->idsro;
             $response->url = isset($pagina) ? $pagina : url()->current();
+            $response->empresa_id = $resp->empresa_id;
         }
         return $response;
     }
@@ -73,14 +74,13 @@ if (!function_exists('queryErrorParse')) {
 }
 if (!function_exists('errorException')) {
     function errorException(\Exception $e) {
-        $error = new stdClass();
-        $error->error = true;
-        return $error;
-        $error->msg = ['Ocurrio un error de tipo ' . $e->getCode()];
-        $error->dev = $e->getMessage();
-        $error->params = [];
-        $error->code = $e->getCode();
-        $error->debug = Config::get('app.debug');
+        $error = [];
+        $error["error"] = true;
+        $error["msg"] = ['Ocurrio un error de tipo ' . $e->getCode()];
+        $error["dev"] = $e->getMessage();
+        $error["params"] = [];
+        $error["code"] = $e->getCode();
+        $error["debug"] = Config::get('app.debug');
         return $error;
     }
 }
