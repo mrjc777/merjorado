@@ -1,11 +1,17 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
+use App\Insumo;
 
 class InsumoController extends Controller
 {
+    /**
+     * Contrcutor,
+     */
+    public function __contruct() {
+        $this->middleware('auth:api');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -13,9 +19,16 @@ class InsumoController extends Controller
      */
     public function index()
     {
-        //Funcion para traer todos los insumos registrados
-        $data = \DB::select('select get_all_insumos()');
-        return $data[0]->get_all_insumos;
+        try {
+            $auth = getAuthh(request()->path());
+            $resp = Insumo::list($auth, 'LISTAR', []);
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
     }
 
     /**
@@ -36,15 +49,16 @@ class InsumoController extends Controller
      */
     public function store(Request $request)
     {
-        //Funcion para insertar insumos de una empresa ya habilitada en el RITEX
-        $data = \DB::select('select insert_insumos(?, ?, ?, ?, ?)', array(
-            $request->codigo_insumo,
-            $request->descripcion,
-            $request->unidad_medida_id,
-            $request->partida_arancelaria_id,
-            $request->empresa_id
-        ));
-        return $data[0]->insert_insumos;
+        try {
+            $auth = getAuthh(request()->path());
+            $resp = Insumo::abm($auth, 'CREAR', $request->input());
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
     }
 
     /**
@@ -89,6 +103,18 @@ class InsumoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $input = [
+                'idins' => $id
+            ];
+            $auth = getAuthh(request()->path());
+            $resp = Insumo::abm($auth, 'ELIMINAR', $input);
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
     }
 }

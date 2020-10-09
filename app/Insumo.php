@@ -14,15 +14,33 @@ class Insumo extends Model
     protected $timestamp = false;
 
     /**
-     * lISTADO DE DATOS PARA LA TABLA ALMACENES
+     * lISTADO DE DATOS PARA LA TABLA INSUMOS
      * @param $auth
      * @param $action
      * @param array $data
      * @return array
      */
-    public static function getStepInsumos($auth, $action, $data = []) {
+    public static function list($auth, $action, $data = []) 
+    {
         try {
-            $sql = "select * from sp_solmod_listar(?,?,?) as result";
+            $sql = "select * from sp_ins_list(?,?,?) as result";
+            return DB::select($sql, [
+                Json::encode($auth),
+                $action,
+                Json::encode($data)
+            ])[0]->result;
+        } catch (\Illuminate\Database\QueryException $e) {
+            return queryErrorParse($e);
+        }
+    }
+
+    /**
+     * Altas, bajas, modificaciones en la tabla insumos
+     */
+    public static function abm($auth, $action, $data = [])
+    {
+        try {
+            $sql = "select * from sp_ins_abm(?,?,?) as result";
             return DB::select($sql, [
                 Json::encode($auth),
                 $action,

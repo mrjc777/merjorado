@@ -1,9 +1,8 @@
 <?php
 
 namespace App;
-
+use Psy\Util\Json;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 
 class UnidadMedida extends Model
@@ -12,9 +11,18 @@ class UnidadMedida extends Model
     protected $fillable = ['unidad_de_medida', 'descripcion'];
     protected $timestamp = false;
 
-    public static function getAll($auth) {
+    /**
+     * LISTADO DE LAS UNIDADES DE MEDIDA Y SU DESCRIPCION
+     */
+    public static function list($auth, $action, $data = []) 
+    {
         try {
-            return DB::select('select get_all_unidad_medidas(?) as resp', [$auth])[0]->resp;
+            $sql = "select * from sp_ume_list(?,?,?) as result";
+            return DB::select($sql, [
+                Json::encode($auth),
+                $action,
+                Json::encode($data)
+            ])[0]->result;
         } catch (\Illuminate\Database\QueryException $e) {
             return queryErrorParse($e);
         }

@@ -23,13 +23,13 @@ class UnidadMedidaController extends Controller
     public function index()
     {
         try {
-            $auth = getAuthh(request()->path());
-            // return response()->json($auth);
-            // Funcion para que retorna todas las unidades de medida
-            $unidadMeida = UnidadMedida::getAll($auth);
-            return response()->json($auth);
-            return response()->make($auth)->header('Content-Type', 'application/json');
-        } catch (\Exception $e) {
+            $auth = []; // getAuthh(request()->path());
+            $resp = UnidadMedida::list($auth, 'UNIDAD', $data = []);
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (Exception $e) {
             return response()->json(errorException($e));
         }
     }

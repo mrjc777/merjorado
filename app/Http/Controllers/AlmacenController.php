@@ -1,11 +1,17 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
+use App\Almacen;
 
 class AlmacenController extends Controller
 {
+    /**
+     * Contrcutor,
+     */
+    public function __contruct() {
+        $this->middleware('auth:api');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -13,9 +19,16 @@ class AlmacenController extends Controller
      */
     public function index()
     {
-        //Funcion para traer todos los almacenes
-        $data = \DB::select('select get_all_almacenes()');
-        return $data[0]->get_all_almacenes;
+        try {
+            $auth = getAuthh(request()->path());
+            $resp = Almacen::list($auth, 'LISTAR', []);
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
     }
 
     /**
@@ -36,13 +49,16 @@ class AlmacenController extends Controller
      */
     public function store(Request $request)
     {
-        //Funcion para insertar almacenes(instalaciones/depositos) de una empresa ya habilitada en el RITEX
-        $data = \DB::select('select insert_almacenes(?, ?, ?)', array(
-        $request->direccion,
-        $request->tipo_almacen,
-        $request->empresa_id
-        ));
-        return $data[0]->insert_almacenes;
+        try {
+            $auth = getAuthh(request()->path());
+            $resp = Almacen::abm($auth, 'CREAR', $request->input());
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
     }
 
     /**
@@ -87,6 +103,18 @@ class AlmacenController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $input = [
+                'idalm' => $id
+            ];
+            $auth = getAuthh(request()->path());
+            $resp = Almacen::abm($auth, 'ELIMINAR', $input);
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
     }
 }

@@ -27,10 +27,10 @@ Route::group(['middleware' => ['jwt.verify', 'api']], function ($router) {
     Route::get('menus', 'ApiController@menus');
 
     Route::resource('partidas', 'PartidaArancelariaController');
-    Route::resource('unidadmedida', 'UnidadMedidaController');
     Route::resource('almacenes', 'AlmacenController');
     Route::resource('insumos', 'InsumoController');
     Route::resource('productos', 'ProductoController');
+    Route::resource('aduanaserv', 'AduanaRitexController');
 
     /** MODULO DE APERACIONES SOLICITUD DE MODIFICACION*/
     Route::get('solModificacion', 'SolicitudController@solModificacion');
@@ -38,6 +38,7 @@ Route::group(['middleware' => ['jwt.verify', 'api']], function ($router) {
     Route::post('deletesolModificacion', 'SolicitudController@postDeleteSolModificacion');
     /** FI MODULO DE OPERACIONES */
 });
+Route::get('empresas', 'EmpresaController@index');
+Route::resource('unidadmedida', 'UnidadMedidaController');
 
-Route::resource('empresas', 'EmpresaController');
 

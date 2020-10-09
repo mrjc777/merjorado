@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\Empresa;
+use App\AduanaRitex;
 
-class EmpresaController extends Controller
+class AduanaRitexController extends Controller
 {
+    /**
+     * Contrcutor,
+     */
     public function __contruct() {
         $this->middleware('auth:api');
     }
@@ -17,19 +20,16 @@ class EmpresaController extends Controller
     public function index()
     {
         try {
-            $auth = []; // getAuthh(request()->path());
-            $resp = Empresa::list($auth, 'PRE_REGISTRO', $data = []);
+            $auth = getAuthh(request()->path());
+            $resp = AduanaRitex::list($auth, 'LISTAR', []);
             if (isset($resp->error)) {
                 return response()->json(msgErrorQuery($resp));
             }
             return response()->make($resp)->header('Content-Type', 'application/json');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return response()->json(errorException($e));
         }
-
     }
-
-    
 
     /**
      * Show the form for creating a new resource.
@@ -50,41 +50,13 @@ class EmpresaController extends Controller
     public function store(Request $request)
     {
         try {
-            $auth = [];
-            $resp = Empresa::abm($auth, 'PRE_REGISTRO', $data = $request->input());
-            if (isset($resp->error)) {
-                return response()->json(msgErrorQuery($resp));
-            }
-            return response()->make($resp)->header('Content-Type', 'application/json');
-        } catch (Exception $e) {
-            return response()->json(errorException($e));
-        }
-    }
-
-    public function rechazar(Request $request)
-    {
-        try {
             $auth = getAuthh(request()->path());
-            $resp = Empresa::abm($auth, 'RECHAZAR', $data = $request->input());
+            $resp = AduanaRitex::abm($auth, 'CREAR', $request->input());
             if (isset($resp->error)) {
                 return response()->json(msgErrorQuery($resp));
             }
             return response()->make($resp)->header('Content-Type', 'application/json');
-        } catch (Exception $e) {
-            return response()->json(errorException($e));
-        }
-    }
-
-    public function habilitar(Request $request)
-    {
-        try {
-            $auth = getAuthh(request()->path());
-            $resp = Empresa::abm($auth, 'HABILITAR', $data = $request->input());
-            if (isset($resp->error)) {
-                return response()->json(msgErrorQuery($resp));
-            }
-            return response()->make($resp)->header('Content-Type', 'application/json');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return response()->json(errorException($e));
         }
     }

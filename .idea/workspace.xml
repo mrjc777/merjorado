@@ -3,11 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="a1ed19c0-ba87-4a77-aba5-bc016a493d73" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Almacen.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Almacen.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Help.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Help.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Insumo.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Insumo.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Producto.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Producto.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Empresa.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Empresa.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SolicitudController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SolicitudController.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,7 +154,7 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="reference.webide.settings.project.settings.php" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -196,7 +193,12 @@
       <workItem from="1600722284505" duration="7557000" />
       <workItem from="1600995296067" duration="710000" />
       <workItem from="1601218154753" duration="9428000" />
-      <workItem from="1601324247609" duration="9035000" />
+      <workItem from="1601324247609" duration="11221000" />
+      <workItem from="1601926849897" duration="1336000" />
+      <workItem from="1602080248537" duration="4000" />
+      <workItem from="1602082933457" duration="218000" />
+      <workItem from="1602083172710" duration="238000" />
+      <workItem from="1602083425746" duration="102000" />
     </task>
     <servers />
   </component>
@@ -224,9 +226,9 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="739" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1599247617012" />
-    <state x="461" y="164" key="SettingsEditor" timestamp="1600732683465">
+    <state x="461" y="164" key="SettingsEditor" timestamp="1602083223961">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="461" y="164" key="SettingsEditor/0.0.1920.1040/1920.0.1280.984@0.0.1920.1040" timestamp="1600732683465" />
+    <state x="461" y="164" key="SettingsEditor/0.0.1920.1040/1920.0.1280.984@0.0.1920.1040" timestamp="1602083223961" />
   </component>
 </project>

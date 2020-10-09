@@ -12,6 +12,10 @@ use Psy\Util\Json;
 
 class SolicitudController extends Controller
 {
+    private $auth;
+    public function __construct() {
+        $this->auth = getAuthh(request()->path());
+    }
     //
     public function solModificacion(Request $request) {
         try{
@@ -48,9 +52,9 @@ class SolicitudController extends Controller
     function generateStep1() {
         try {
             // Obtenemos los datos de atuenticacion del usuario
-            $auth = getAuthh(request()->path());
+            //$auth = getAuthh(request()->path());
             // llamamos a la funcion de generacion de datos en la BD
-            $data = Almacen::getStepAlmacenes($auth, 'PASO1', []);
+            $data = Almacen::getStepAlmacenes($this->auth, 'PASO1', []);
             // Verificamos si existe algun error en base de datos
             if(isset($data['error'])) {
                 return \response()->make($data);

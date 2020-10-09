@@ -7,6 +7,9 @@ use App\PartidaAracenlaria;
 
 class PartidaArancelariaController extends Controller
 {
+    public function __contruct() {
+        $this->middleware('auth:api');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,9 +17,16 @@ class PartidaArancelariaController extends Controller
      */
     public function index()
     {
-        ////Funcion para que retorna todas las partidas arancelarias
-        $data = \DB::select('select get_all_partidas()');
-        return $data[0]->get_all_partidas;
+        try {
+            $auth = []; // getAuthh(request()->path());
+            $resp = PartidaAracenlaria::list($auth, 'PARTIDAS', $data = []);
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (Exception $e) {
+            return response()->json(errorException($e));
+        }
     }
 
     /**

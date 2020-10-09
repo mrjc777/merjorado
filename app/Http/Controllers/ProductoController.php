@@ -1,11 +1,17 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
+use App\Producto;
 
 class ProductoController extends Controller
 {
+      /**
+     * Contrcutor,
+     */
+    public function __contruct() {
+        $this->middleware('auth:api');
+    }
 
     /**
      * Display a listing of the resource.
@@ -14,9 +20,16 @@ class ProductoController extends Controller
      */
     public function index()
     {
-        //Funcion para traer todos los productos registrados
-        $data = \DB::select('select get_all_productos()');
-        return $data[0]->get_all_productos;
+        try {
+            $auth = getAuthh(request()->path());
+            $resp = Producto::list($auth, 'LISTAR', []);
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
     }
 
     /**
@@ -37,15 +50,16 @@ class ProductoController extends Controller
      */
     public function store(Request $request)
     {
-        //Funcion para insertar productos de una empresa ya habilitada en el RITEX
-        $data = \DB::select('select insert_productos(?, ?, ?, ?, ?)', array(
-            $request->codigo_producto,
-            $request->descripcion,
-            $request->unidad_medida_id,
-            $request->partida_arancelaria_id,
-            $request->empresa_id
-        ));
-        return $data[0]->insert_productos;
+        try {
+            $auth = getAuthh(request()->path());
+            $resp = Producto::abm($auth, 'CREAR', $request->input());
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
     }
 
     /**
@@ -90,6 +104,18 @@ class ProductoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $input = [
+                'idpro' => $id
+            ];
+            $auth = getAuthh(request()->path());
+            $resp = Producto::abm($auth, 'ELIMINAR', $input);
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
     }
 }

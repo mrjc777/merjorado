@@ -13,15 +13,12 @@ class Almacen extends Model
     protected $timestamp = false;
 
     /**
-     * lISTADO DE DATOS PARA LA TABLA ALMACENES
-     * @param $auth
-     * @param $action
-     * @param array $data
-     * @return array
+     * Listado de datos de la tabla Almacenes
      */
-    public static function getStepAlmacenes($auth, $action, $data = []) {
+    public static function list($auth, $action, $data = [])
+    {
         try {
-            $sql = "select * from sp_solmod_listar(?,?,?) as result";
+            $sql = "select * from sp_alm_list(?,?,?) as result";
             return DB::select($sql, [
                 Json::encode($auth),
                 $action,
@@ -32,16 +29,14 @@ class Almacen extends Model
         }
     }
 
+    
     /**
-     * TRANSACCIONES PARA SOLICITUDES
-     * @param $auth
-     * @param $action
-     * @param array $data
-     * @return array
+     * Altas, bajas, modificaciones en la tabla almacenes
      */
-    public static function setStepAlmacenes($auth, $action, $data = []) {
+    public static function abm($auth, $action, $data = [])
+    {
         try {
-            $sql = "select * from sp_almacenes_abm(?,?,?) as result";
+            $sql = "select * from sp_alm_abm(?,?,?) as result";
             return DB::select($sql, [
                 Json::encode($auth),
                 $action,
@@ -51,4 +46,5 @@ class Almacen extends Model
             return queryErrorParse($e);
         }
     }
+
 }
