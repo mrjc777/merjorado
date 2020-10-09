@@ -76,7 +76,7 @@ if (!function_exists('errorException')) {
     function errorException(\Exception $e) {
         $error = [];
         $error["error"] = true;
-        $error["msg"] = ['Ocurrio un error de tipo ' . $e->getCode()];
+        $error["msg"] = [(string) $e->getMessage()];
         $error["dev"] = $e->getMessage();
         $error["params"] = [];
         $error["code"] = $e->getCode();

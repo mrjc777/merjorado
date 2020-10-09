@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EmpresaTipoController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,6 +32,7 @@ Route::group(['middleware' => ['jwt.verify', 'api']], function ($router) {
     Route::resource('insumos', 'InsumoController');
     Route::resource('productos', 'ProductoController');
     Route::resource('aduanaserv', 'AduanaRitexController');
+    Route::resource('empresatipo', 'EmpresaTipoController');
 
     /** MODULO DE APERACIONES SOLICITUD DE MODIFICACION*/
     Route::get('solModificacion', 'SolicitudController@solModificacion');
@@ -39,6 +41,9 @@ Route::group(['middleware' => ['jwt.verify', 'api']], function ($router) {
     /** FI MODULO DE OPERACIONES */
 });
 Route::get('empresas', 'EmpresaController@index');
+
+Route::post('enviar_archivo', 'EmpresaTipoController@setFile');
+
 Route::resource('unidadmedida', 'UnidadMedidaController');
 
 

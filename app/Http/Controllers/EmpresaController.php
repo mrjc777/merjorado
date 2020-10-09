@@ -26,7 +26,6 @@ class EmpresaController extends Controller
         } catch (Exception $e) {
             return response()->json(errorException($e));
         }
-
     }
 
     
@@ -56,7 +55,7 @@ class EmpresaController extends Controller
                 return response()->json(msgErrorQuery($resp));
             }
             return response()->make($resp)->header('Content-Type', 'application/json');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return response()->json(errorException($e));
         }
     }
@@ -70,7 +69,7 @@ class EmpresaController extends Controller
                 return response()->json(msgErrorQuery($resp));
             }
             return response()->make($resp)->header('Content-Type', 'application/json');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return response()->json(errorException($e));
         }
     }
@@ -84,7 +83,7 @@ class EmpresaController extends Controller
                 return response()->json(msgErrorQuery($resp));
             }
             return response()->make($resp)->header('Content-Type', 'application/json');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return response()->json(errorException($e));
         }
     }
