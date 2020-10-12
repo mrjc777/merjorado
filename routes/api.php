@@ -34,11 +34,11 @@ Route::group(['middleware' => ['jwt.verify', 'api']], function ($router) {
     Route::resource('aduanaserv', 'AduanaRitexController');
     Route::resource('empresatipo', 'EmpresaTipoController');
 
-    /** MODULO DE APERACIONES SOLICITUD DE MODIFICACION*/
-    Route::get('solModificacion', 'SolicitudController@solModificacion');
+    /** MODULO DE OPERACIONES SOLICITUD DE MODIFICACION*/
+    Route::get('almacenesmod', 'AlmacenController@listmod');
     Route::post('solModificacion', 'SolicitudController@postSolModificacion');
     Route::post('deletesolModificacion', 'SolicitudController@postDeleteSolModificacion');
-    /** FI MODULO DE OPERACIONES */
+    /** FIN MODULO DE OPERACIONES */
 });
 Route::get('empresas', 'EmpresaController@index');
 

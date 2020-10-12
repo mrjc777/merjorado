@@ -117,4 +117,22 @@ class AlmacenController extends Controller
             return response()->json(errorException($e));
         }
     }
+
+    /**
+     * FUNCIONES PERSONALIZADAS PARA EL FORMULARIO DE MODIFICACION 
+     */
+
+     public function listmod()
+     {
+        try {
+            $auth = getAuthh(request()->path());
+            $resp = Almacen::listmod($auth, 'LISTAR', []);
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
+     }
 }
