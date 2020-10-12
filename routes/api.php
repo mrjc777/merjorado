@@ -36,7 +36,7 @@ Route::group(['middleware' => ['jwt.verify', 'api']], function ($router) {
 
     /** MODULO DE OPERACIONES SOLICITUD DE MODIFICACION*/
     Route::get('almacenesmod', 'AlmacenController@listmod');
-    Route::post('solModificacion', 'SolicitudController@postSolModificacion');
+    Route::get('insumosmod', 'InsumoController@listmod');
     Route::post('deletesolModificacion', 'SolicitudController@postDeleteSolModificacion');
     /** FIN MODULO DE OPERACIONES */
 });

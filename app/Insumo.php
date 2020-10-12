@@ -50,4 +50,23 @@ class Insumo extends Model
             return queryErrorParse($e);
         }
     }
+
+    /**
+     * LISTADO DE DATOS DE LA TABLA INSUMOS DE REGISTROS YA INCORPORADOS, PARA LA MODIFICACION 
+     */
+
+    public static function listmod($auth, $action, $data = []) 
+    {
+        try {
+            $sql = "select * from sp_ins_mod_list(?,?,?) as result";
+            return DB::select($sql, [
+                Json::encode($auth),
+                $action,
+                Json::encode($data)
+            ])[0]->result;
+        } catch (\Illuminate\Database\QueryException $e) {
+            return queryErrorParse($e);
+        }
+    }
+
 }

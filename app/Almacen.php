@@ -47,6 +47,9 @@ class Almacen extends Model
         }
     }
 
+    /**
+     * LISTADO DE ALMACENES YA INCORPORADOS, PARA MODIFICACION
+     */
     public static function listmod($auth, $action, $data)
     {
         try {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Insumo;
+use PhpParser\Builder\Function_;
 
 class InsumoController extends Controller
 {
@@ -117,4 +118,24 @@ class InsumoController extends Controller
             return response()->json(errorException($e));
         }
     }
+
+    /**
+     * FUNCIONES PERSONALIZADAS PARA EL FORMULARIO DE MODIFICACION 
+     */
+
+     public function listmod()
+     {
+        try {
+            $auth = getAuthh(request()->path());
+            $resp = Insumo::listmod($auth, 'LIS_INSUMOS_EMPRESA', []);
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
+     }
+
+    
 }
