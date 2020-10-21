@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\Solicitud;
+use App\Producto;
 
-class SolicitudController extends Controller
+
+class InsumoProductoController extends Controller
 {
     /**
      * Contrcutor,
@@ -21,7 +22,7 @@ class SolicitudController extends Controller
     {
         try {
             $auth = getAuthh(request()->path());
-            $resp = Solicitud::list($auth, 'LISTAR', []);
+            $resp = Producto::listinspro($auth, 'LISTAR', []);
             if (isset($resp->error)) {
                 return response()->json(msgErrorQuery($resp));
             }
@@ -51,7 +52,7 @@ class SolicitudController extends Controller
     {
         try {
             $auth = getAuthh(request()->path());
-            $resp = Solicitud::abm($auth, 'CREAR_SOLICITUD', $request->input());
+            $resp = Producto::ins_pro_abm($auth, 'CREAR_INSUMO_PRODUCTO', $request->input());
             if (isset($resp->error)) {
                 return response()->json(msgErrorQuery($resp));
             }

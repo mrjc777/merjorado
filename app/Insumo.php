@@ -55,7 +55,7 @@ class Insumo extends Model
      * LISTADO DE DATOS DE LA TABLA INSUMOS DE REGISTROS YA INCORPORADOS, PARA LA MODIFICACION 
      */
 
-    public static function listmod($auth, $action, $data = []) 
+    public static function ins_mod_list($auth, $action, $data = []) 
     {
         try {
             $sql = "select * from sp_ins_mod_list(?,?,?) as result";
@@ -68,5 +68,25 @@ class Insumo extends Model
             return queryErrorParse($e);
         }
     }
+
+    /**
+     * ALTAS, BAJAS, MODIFICACIONES EN LA TABLA DE INSUMOS PARA SOLICITUD DE MODIFICACION
+     */
+
+    public static function ins_mod_abm($auth, $action, $data = [])
+    {
+        try {
+            $sql = "select * from sp_ins_mod_abm(?,?,?) as result";
+            return DB::select($sql, [
+                Json::encode($auth),
+                $action,
+                Json::encode($data)
+            ])[0]->result;
+        } catch (\Illuminate\Database\QueryException $e) {
+            return queryErrorParse($e);
+        }
+    }
+
+    
 
 }

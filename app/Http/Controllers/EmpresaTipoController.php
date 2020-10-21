@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Empresa;
 use App\EmpresaTipo;
+use App\Producto;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -133,12 +135,82 @@ class EmpresaTipoController extends Controller
             return response()->json(errorException($e));
         }
     }
-
+    
+    /***
+     * Controlador para cargar los archivos informe pericial y otros (Solicitud de Modificacion)
+     */
     public function setFile(Request $request) {
-        $file = $request->file('input_pdf');
-        dd(storage_path('app'));
-        // Storage::disk('pdfs')->put($file->getClientOriginalName(),  $file);
-        // $file->store(storage_path('pdfs'));
-        Storage::putFile('pdfs', $file);
+        try {
+            $data = $request->all();
+
+            $file_64 = $data['archivo_base64'];
+            $fileName = date('YmdHis').'.pdf';
+            $path = 'public/'.$data['ruta'];
+            Storage::disk('public')->put($fileName, base64_decode($file_64, true));
+
+            $auth = getAuthh(request()->path());;
+            $resp = Producto::ArchivoSolModificacion($auth, 'CREAR', $data);
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
+    }
+
+    /***
+     * Controlador para listar los archivos informe pericial y otros (Solicitud de Modificacion)
+     */
+    public function getFiles() {
+        try {
+            $auth = getAuthh(request()->path());;
+            $resp = EmpresaTipo::list($auth, 'OBTENER_ARCHIVOS', []);
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
+    }
+
+    /***
+     * Controlador para cargar el archivo de solicitud de modificacion firmado por la empresa
+     */
+    public function setFileSol(Request $request) {
+        try {
+            $data = $request->all();
+
+            $file_64 = $data['archivo_base64'];
+            $fileName = date('YmdHis').'.pdf';
+            $path = 'public/'.$data['ruta'];
+            Storage::disk('public')->put($fileName, base64_decode($file_64, true));
+
+            $auth = getAuthh(request()->path());;
+            $resp = Producto::solmodemp($auth, 'CREAR', $data);
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
+    }
+
+     /***
+     * Controlador para mostrar la previsualizacion de la solicitud de incorporacion
+     */
+    public function getPreview(Request $request) {
+        try {
+            $auth = getAuthh(request()->path());
+            $resp = Producto::preinc($auth, 'PREVIEW', []);
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
     }
 }

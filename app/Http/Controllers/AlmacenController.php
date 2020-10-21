@@ -122,11 +122,15 @@ class AlmacenController extends Controller
      * FUNCIONES PERSONALIZADAS PARA EL FORMULARIO DE MODIFICACION 
      */
 
-     public function listmod()
+    /**
+     * LISTAR ALMACENES PARA SOLICITUD DE MODIFICACION
+     */
+
+     public function listaralmacenes()
      {
         try {
             $auth = getAuthh(request()->path());
-            $resp = Almacen::listmod($auth, 'LISTAR', []);
+            $resp = Almacen::alm_mod_list($auth, 'LISTAR', []);
             if (isset($resp->error)) {
                 return response()->json(msgErrorQuery($resp));
             }
@@ -135,4 +139,46 @@ class AlmacenController extends Controller
             return response()->json(errorException($e));
         }
      }
+
+     /**
+      * INSERTAR ALMACENES PARA SOLICITUD DE MODIFICACION
+      */
+    
+      public function insertaralmacenes(Request $request)
+    {
+        try {
+            $auth = getAuthh(request()->path());
+            $resp = Almacen::alm_mod_abm($auth, 'CREAR', $request->input());
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
+    }
+
+    /**
+      * ELIMINACION LOGICA DE ALMACENES EN SOLICITUD DE MODIFICACION
+      */
+
+      public function eliminaralmacenes($id)
+      {
+          try {
+              $input = [
+                  'idalm' => $id
+              ];
+              $auth = getAuthh(request()->path());
+              $resp = Almacen::alm_mod_abm($auth, 'ELIMINAR', $input);
+              if (isset($resp->error)) {
+                  return response()->json(msgErrorQuery($resp));
+              }
+              return response()->make($resp)->header('Content-Type', 'application/json');
+          } catch (\Exception $e) {
+              return response()->json(errorException($e));
+          }
+      }
+
+
+
 }
