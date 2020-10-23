@@ -56,6 +56,12 @@ Route::group(['middleware' => ['jwt.verify', 'api']], function ($router) {
     Route::get('getfiles', 'EmpresaTipoController@getFiles');
     /** FIN MODULO DE MODIFICACIONES*/
 
+    /**
+     * MODULO DE OPERACIONES DEL TECNICO VCI*/
+    Route::resource('crearuser', 'CreateUserController');
+    Route::resource('observarsol', 'SolicitudController');
+     /*FIN MODULO OPERACIONES TECNICO VCI*/
+
     /**SOLICITUDES */
     Route::resource('solicitudes', 'SolicitudController');
     /**FIN SOLICITUDES  */

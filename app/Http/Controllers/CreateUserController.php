@@ -2,16 +2,10 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\Solicitud;
+use App\CreateUser;
 
-class SolicitudController extends Controller
+class CreateUserController extends Controller
 {
-    /**
-     * Contrcutor,
-     */
-    public function __contruct() {
-        $this->middleware('auth:api');
-    }
     /**
      * Display a listing of the resource.
      *
@@ -19,16 +13,7 @@ class SolicitudController extends Controller
      */
     public function index()
     {
-        try {
-            $auth = getAuthh(request()->path());
-            $resp = Solicitud::list($auth, 'LISTAR', []);
-            if (isset($resp->error)) {
-                return response()->json(msgErrorQuery($resp));
-            }
-            return response()->make($resp)->header('Content-Type', 'application/json');
-        } catch (\Exception $e) {
-            return response()->json(errorException($e));
-        }
+        //
     }
 
     /**
@@ -51,7 +36,7 @@ class SolicitudController extends Controller
     {
         try {
             $auth = getAuthh(request()->path());
-            $resp = Solicitud::abm($auth, 'CREAR_SOLICITUD', $request->input());
+            $resp = CreateUser::abm($auth, 'USUARIO_ALTA', $request->input());
             if (isset($resp->error)) {
                 return response()->json(msgErrorQuery($resp));
             }
@@ -59,21 +44,6 @@ class SolicitudController extends Controller
         } catch (\Exception $e) {
             return response()->json(errorException($e));
         }
-    }
-
-    public function observar(Request $request)
-    {
-        try {
-            $auth = getAuthh(request()->path());
-            $resp = Solicitud::abm($auth, 'OBSERVAR', $data = $request->input());
-            if (isset($resp->error)) {
-                return response()->json(msgErrorQuery($resp));
-            }
-            return response()->make($resp)->header('Content-Type', 'application/json');
-        } catch (\Exception $e) {
-            return response()->json(errorException($e));
-        }
-        
     }
 
     /**
