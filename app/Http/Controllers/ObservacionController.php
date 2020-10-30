@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\CreateUser;
-use Illuminate\Support\Facades\Hash;
+use App\Observacion;
 
-class CreateUserController extends Controller
+class ObservacionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -37,10 +36,7 @@ class CreateUserController extends Controller
     {
         try {
             $auth = getAuthh(request()->path());
-            $data = $request->all();
-            $data['password']= Hash::make($data['password']);
-            $resp = CreateUser::abm($auth, 'USUARIO_ALTA', $data);
-            //$resp = CreateUser::abm($auth, 'USUARIO_ALTA', $request->input());
+            $resp = Observacion::abm($auth, 'CREAR_OBSERVACION', $request->input());
             if (isset($resp->error)) {
                 return response()->json(msgErrorQuery($resp));
             }
@@ -92,6 +88,18 @@ class CreateUserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $input = [
+                'idobs' => $id
+            ];
+            $auth = getAuthh(request()->path());
+            $resp = Observacion::abm($auth, 'ELIMINAR_OBSERVACION', $input);
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
     }
 }

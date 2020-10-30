@@ -48,6 +48,46 @@ return [
             'root' => storage_path('app'),
         ],
 
+        'solicitud_incorporacion' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/archivos_ritex/solicitud_incorporacion'),
+            'url' => env('APP_URL'). '/storage',
+            'visibility' => 'public',
+
+        ],
+
+        'solicitud_modificacion' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/archivos_ritex/solicitud_modificacion'),
+            'url' => env('APP_URL'). '/storage',
+            'visibility' => 'public',
+
+        ],
+
+        'resolucion' => [
+            'driver' => 'local',
+            'root' => public_path('app/public/archivos_ritex/resoluciones'),
+            'url' => env('APP_URL'). '/storage',
+            'visibility' => 'public',
+
+        ],
+
+        'informe' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/archivos_ritex/informes'),
+            'url' => env('APP_URL'). '/storage',
+            'visibility' => 'public',
+
+        ],
+
+        'temporales' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/archivos_ritex/temporales'),
+            'url' => env('APP_URL'). '/storage',
+            'visibility' => 'public',
+
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

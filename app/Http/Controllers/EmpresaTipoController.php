@@ -8,6 +8,7 @@ use App\Producto;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use stdClass;
 
@@ -137,17 +138,16 @@ class EmpresaTipoController extends Controller
     }
     
     /***
-     * Controlador para cargar los archivos informe pericial y otros (Solicitud de Modificacion)
+     * Controlador para cargar los archivos informe pericial y otros (Solicitud de Incorporacion)
      */
     public function setFile(Request $request) {
         try {
             $data = $request->all();
-
             $file_64 = $data['archivo_base64'];
             $fileName = date('YmdHis').'.pdf';
-            $path = 'public/'.$data['ruta'];
-            Storage::disk('public')->put($fileName, base64_decode($file_64, true));
-
+            Storage::disk('solicitud_incorporacion')->put($fileName, base64_decode($file_64, true));
+            $dominio = $request->getHost();
+            $data['path_completo'] = 'http://'.$dominio.'/storage/archivos_ritex/solicitud_incorporacion/'.$fileName;
             $auth = getAuthh(request()->path());;
             $resp = Producto::ArchivoSolModificacion($auth, 'CREAR', $data);
             if (isset($resp->error)) {
@@ -160,7 +160,7 @@ class EmpresaTipoController extends Controller
     }
 
     /***
-     * Controlador para listar los archivos informe pericial y otros (Solicitud de Modificacion)
+     * Controlador para listar los archivos informe pericial y otros (Solicitud de Incorporacion)
      */
     public function getFiles() {
         try {
@@ -176,26 +176,26 @@ class EmpresaTipoController extends Controller
     }
 
     /***
-     * Controlador para cargar el archivo de solicitud de modificacion firmado por la empresa
+     * Controlador para cargar los archivos informe pericial y otros (Solicitud de Modificacion)
      */
-    public function setFileSol(Request $request) {
+    public function setFileMod(Request $request) 
+    {
         try {
             $data = $request->all();
-
             $file_64 = $data['archivo_base64'];
             $fileName = date('YmdHis').'.pdf';
-            $path = 'public/'.$data['ruta'];
-            Storage::disk('public')->put($fileName, base64_decode($file_64, true));
-
+            Storage::disk('solicitud_modificacion')->put($fileName, base64_decode($file_64, true));
+            $dominio = $request->getHost();
+            $data['path_completo'] = 'http://'.$dominio.'/storage/archivos_ritex/solicitud_modificacion/'.$fileName;
             $auth = getAuthh(request()->path());;
-            $resp = Producto::solmodemp($auth, 'CREAR', $data);
+            $resp = Producto::ArchivoSolModificacion($auth, 'CREAR', $data);
             if (isset($resp->error)) {
                 return response()->json(msgErrorQuery($resp));
             }
             return response()->make($resp)->header('Content-Type', 'application/json');
         } catch (\Exception $e) {
             return response()->json(errorException($e));
-        }
+        }   
     }
 
      /***

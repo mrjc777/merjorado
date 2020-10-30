@@ -130,21 +130,6 @@ class Producto extends Model
         }
     }
 
-    //Archivo pdf de solicitud de modificacion firmada por la empresa
-    public static function solmodemp($auth, $action, $data = []) 
-    {
-        try {
-            $sql = "select * from sp_file_sol_mod_emp_abm(?,?,?) as result";
-            return DB::select($sql, [
-                Json::encode($auth),
-                $action,
-                Json::encode($data)
-            ])[0]->result;
-        } catch (\Illuminate\Database\QueryException $e) {
-            return queryErrorParse($e);
-        }
-    }
-
     //PREVISUALIZACION DE LA SOLICITUD INCORPORACION 
     public static function preinc($auth, $action, $data = []) 
     {

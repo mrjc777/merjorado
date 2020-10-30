@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\Solicitud;
+use App\Aprobar;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\App;
+use Barryvdh\DomPDF\Facade as PDF;
 
-class SolicitudController extends Controller
+class AprobarController extends Controller
 {
     /**
      * Contrcutor,
@@ -21,7 +24,7 @@ class SolicitudController extends Controller
     {
         try {
             $auth = getAuthh(request()->path());
-            $resp = Solicitud::list($auth, 'LISTAR', []);
+            $resp = Aprobar::list($auth, 'LISTAR_RESOLUCIONES', []);
             if (isset($resp->error)) {
                 return response()->json(msgErrorQuery($resp));
             }
@@ -50,22 +53,24 @@ class SolicitudController extends Controller
     public function store(Request $request)
     {
         try {
-            $auth = getAuthh(request()->path());
-            $resp = Solicitud::abm($auth, 'CREAR_SOLICITUD', $request->input());
-            if (isset($resp->error)) {
-                return response()->json(msgErrorQuery($resp));
-            }
-            return response()->make($resp)->header('Content-Type', 'application/json');
-        } catch (\Exception $e) {
-            return response()->json(errorException($e));
-        }
-    }
+            $data = $request->all();
+            //archivo informe
+            $file_64 = $data['informe_archivo64'];
+            $fileName = date('YmdHis').'.pdf';
+            Storage::disk('informe')->put($fileName, base64_decode($file_64, true));
+            $dominio = $request->getHost();
+            $data['path_completo_informe'] = 'http://'.$dominio.'/storage/archivos_ritex/informes/'.$fileName;
+            //fin informe
+            //archivo resolucion
+            $file_64 = $data['resolucion_archivo64'];
+            $fileName = date('YmdHis').'.pdf';
+            Storage::disk('resolucion')->put($fileName, base64_decode($file_64, true));
+            $dominio = $request->getHost();
+            $data['path_completo_resolucion'] = 'http://'.$dominio.'/storage/archivos_ritex/resoluciones/'.$fileName;
+            //fin resolucion
 
-    public function observar(Request $request)
-    {
-        try {
             $auth = getAuthh(request()->path());
-            $resp = Solicitud::abm($auth, 'OBSERVAR', $data = $request->input());
+            $resp = Aprobar::abm($auth, 'CREAR_RESOLUCION', $data);
             if (isset($resp->error)) {
                 return response()->json(msgErrorQuery($resp));
             }
@@ -73,7 +78,6 @@ class SolicitudController extends Controller
         } catch (\Exception $e) {
             return response()->json(errorException($e));
         }
-        
     }
 
     /**
@@ -118,18 +122,34 @@ class SolicitudController extends Controller
      */
     public function destroy($id)
     {
-        try {
-            $input = [
-                'idsol' => $id
+        //
+    }
+
+    /**
+     * FUNCIONES PARA CARGADO DE ARCHIVOS RESOLUCION
+     */
+
+    public function reporteResolucion(Request $request)  
+    {
+       try{
+            $data = $request->all();
+            //$fechaImpresion = 'La Paz, '.date('d').' de '.$this->fecha().' de '.date('Y');
+            $fechaImpresion = 'La Paz, '.date('d');
+            $pdf = PDF::loadView('reportes.resolucionincorporacion');
+            //$pdf->setPaper('LETTER','portrait');
+            $reporte = $pdf->output();
+            $fileName = 'resolucion'.date('YmdHis').'.pdf';
+            Storage::disk('temporales')->put($fileName, $reporte);
+            
+            $dominio = $request->getHost();
+            $resp = [
+                "type" => "success",
+                "message" => "Descarga de Template de la resolucion",
+                "data" => "http://".$dominio."/storage/archivos_ritex/templates/".$fileName
             ];
-            $auth = getAuthh(request()->path());
-            $resp = Solicitud::abm($auth, 'ELIMINAR_SOLICITUD', $input);
-            if (isset($resp->error)) {
-                return response()->json(msgErrorQuery($resp));
-            }
-            return response()->make($resp)->header('Content-Type', 'application/json');
-        } catch (\Exception $e) {
-            return response()->json(errorException($e));
-        }
+            return response()->make(json_encode($resp))->header('Content-Type', 'application/json');
+       }catch (\Exception $e) {
+        return response()->json(errorException($e));
+       }
     }
 }

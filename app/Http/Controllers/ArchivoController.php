@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\CreateUser;
-use Illuminate\Support\Facades\Hash;
+use App\Archivo;
+use Illuminate\Support\Facades\Storage;
+use App\Solicitud;
 
-class CreateUserController extends Controller
+class ArchivoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,12 +36,16 @@ class CreateUserController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            $auth = getAuthh(request()->path());
+       try {
             $data = $request->all();
-            $data['password']= Hash::make($data['password']);
-            $resp = CreateUser::abm($auth, 'USUARIO_ALTA', $data);
-            //$resp = CreateUser::abm($auth, 'USUARIO_ALTA', $request->input());
+            $file_64 = $data['archivo_base64'];
+            $fileName = date('YmdHis').'.pdf';
+            Storage::disk('solicitud_incorporacion')->put($fileName, base64_decode($file_64, true));
+            $dominio = $request->getHost();
+            $data['path_completo'] = 'http://'.$dominio.'/storage/archivos_ritex/solicitud_incorporacion/'.$fileName;
+            $auth = getAuthh(request()->path());;
+            $resp = Archivo::solIncorporacion($auth, 'CARGAR_SOLICITUD_INC', $data);
+
             if (isset($resp->error)) {
                 return response()->json(msgErrorQuery($resp));
             }
@@ -94,4 +99,6 @@ class CreateUserController extends Controller
     {
         //
     }
+
+
 }

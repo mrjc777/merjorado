@@ -39,7 +39,8 @@ Route::group(['middleware' => ['jwt.verify', 'api']], function ($router) {
     Route::resource('aduanaserv', 'AduanaRitexController');
     Route::resource('empresatipo', 'EmpresaTipoController');
     Route::post('enviar_archivo', 'EmpresaTipoController@setFile');
-    Route::post('sol_mod_file', 'EmpresaTipoController@setFileSol');
+    Route::post('set_sol_inc', 'EmpresaTipoController@setFileSolInc');
+    Route::resource('solicitud_incorporacion', 'ArchivoController');
     Route::get('previewinc', 'EmpresaTipoController@getPreview');
      /** FIN MODULO DE INCORPORACIONES */
 
@@ -59,11 +60,16 @@ Route::group(['middleware' => ['jwt.verify', 'api']], function ($router) {
     /**
      * MODULO DE OPERACIONES DEL TECNICO VCI*/
     Route::resource('crearuser', 'CreateUserController');
-    Route::resource('observarsol', 'SolicitudController');
+    Route::resource('observacion', 'ObservacionController');  //OBSERVACION DE LAS SOLICITUDES
+    Route::resource('solicitudes', 'SolicitudController'); //OBTIENE LAS SOLICITUDES REGISTRADAS EN SISTEMA
+    Route::resource('cargarsolicitud', 'ArchivoController'); //CARGA LA SOLICITUD FIRMADA POR LA EMPRESA (COMPLETAR)
+    Route::resource('aprobar', 'AprobarController'); //APRUEBA LAS SOLICITUDES
+    Route::post('reporteresolucion', 'AprobarController@reporteResolucion'); //resporte resolucion  
+
      /*FIN MODULO OPERACIONES TECNICO VCI*/
 
     /**SOLICITUDES */
-    Route::resource('solicitudes', 'SolicitudController');
+    
     /**FIN SOLICITUDES  */
 });
 
