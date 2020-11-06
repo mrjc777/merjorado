@@ -32,6 +32,7 @@ Route::group(['middleware' => ['jwt.verify', 'api']], function ($router) {
 
     /** MODULO DE OPERACIONES SOLICITUD DE INCORPORACION*/
     Route::resource('partidas', 'PartidaArancelariaController');
+    Route::get('buscarpartida/{partida}', 'PartidaArancelariaController@buscarPartida');
     Route::resource('almacenes', 'AlmacenController');
     Route::resource('insumos', 'InsumoController');
     Route::resource('productos', 'ProductoController');
@@ -64,18 +65,26 @@ Route::group(['middleware' => ['jwt.verify', 'api']], function ($router) {
     Route::resource('solicitudes', 'SolicitudController'); //OBTIENE LAS SOLICITUDES REGISTRADAS EN SISTEMA
     Route::resource('cargarsolicitud', 'ArchivoController'); //CARGA LA SOLICITUD FIRMADA POR LA EMPRESA (COMPLETAR)
     Route::resource('aprobar', 'AprobarController'); //APRUEBA LAS SOLICITUDES
-    Route::post('reporteresolucion', 'AprobarController@reporteResolucion'); //resporte resolucion  
+    //Route::post('reporteresolucion', 'AprobarController@reporteResolucion'); //resporte resolucion  
 
      /*FIN MODULO OPERACIONES TECNICO VCI*/
 
-    /**SOLICITUDES */
+    /**SOLICITUDES PDF INCORPORACION */
+    Route::post('pdfprevisualizacion', 'SolicitudController@pdfPrevisualizacion');
+    Route::post('pdfsolicitudconcodigo', 'SolicitudController@pdfSolicitudConCodigo');
+
     
     /**FIN SOLICITUDES  */
+
+    /** CAMBIO DE CONSTRASEÑA **/
+    Route::post('cambiopass', 'AuthController@changePassword');
 });
 
 Route::get('empresas', 'EmpresaController@index');
 Route::resource('unidadmedida', 'UnidadMedidaController');
 Route::resource('actividad', 'ActividadController');
 Route::resource('empresa', 'EmpresaController');
+Route::post('reporteresolucion', 'AprobarController@reporteResolucion'); //resporte resolucion  
+
 
 

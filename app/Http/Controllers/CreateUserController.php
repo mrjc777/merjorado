@@ -8,6 +8,13 @@ use Illuminate\Support\Facades\Hash;
 class CreateUserController extends Controller
 {
     /**
+     * Contrcutor,
+     */
+    public function __contruct()
+    {
+        $this->middleware('auth:api');
+    }
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response

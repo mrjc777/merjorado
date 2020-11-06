@@ -44,4 +44,22 @@ class Aprobar extends Model
             return queryErrorParse($e);
         }
     }
+
+
+    /**
+     * DATOS PARA IMPRESION RA INCORPORACION
+     */
+    public static function printIncRA($auth, $action, $data = [])
+    {
+        try {
+            $sql = "select * from sp_datos_print_raincorporacion(?,?,?) as result";
+            return DB::select($sql, [
+                Json::encode($auth),
+                $action,
+                Json::encode($data)
+            ])[0]->result;
+        } catch (\Illuminate\Database\QueryException $e) {
+            return queryErrorParse($e);
+        }
+    }
 }

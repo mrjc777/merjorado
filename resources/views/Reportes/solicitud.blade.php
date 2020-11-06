@@ -41,8 +41,8 @@
 
 		<table width="100%">
 	        <tr>
-	            <td align="left" width="50%"><img src="{{ asset('plugins/login/img/bolivia.jpg') }}" width="95px" height="80px"/></td>
-	            <td align="right" width="50%"><img src="{{ asset('plugins/login/img/logo.jpg') }}" width="200px" height="50px"/></td>
+	            <td align="left" width="50%"><img src="{{ asset('assets/img/logo_vice.jpg') }}" width="95px" height="80px"/></td>
+	            <td align="right" width="50%"><img src="{{ asset('assets/img/logo.jpg') }}" width="200px" height="50px"/></td>
 	        </tr>
     	</table>
 
@@ -61,10 +61,10 @@
 <br></br>
 	<center>
 	<TABLE BORDER>
-		<TR><TH>SOLICITUD N°</TH>
-			<TD>VCI-RITEX-0001</TD>
+		<TR><TH>SOLICITUD </TH>
+			<TD><?= $data['codigo_solicitud']; ?></TD>
 		<TD><TH>DE FECHA</TH>
-			<TD>16/08/2020</TD> </TD>		
+			<TD><?= $data['solicitud_fecha']; ?></TD> </TD>		
 	</TABLE>
 	</center>
 <br></br>

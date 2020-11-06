@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Illuminate\Support\Facades\Hash;
+
+use App\User;
+use App\CreateUser;
 
 class AuthController extends Controller {
     /**
@@ -88,5 +92,60 @@ class AuthController extends Controller {
             'expires_in' => auth()->factory()->getTTL() * 60,
             'user' => auth()->user()
         ]);
+    }
+
+    public function changePassword(Request $request) {
+        try {
+            $validator = Validator::make($request->all(), [
+                'opw' => 'required',
+                'npw' => 'required',
+                'rnpw' => 'required',
+            ]);
+    
+            // Enmascaramos el validador
+            $validator->setAttributeNames([
+                'opw' => 'Contraseña antigua', 
+                'npw' => 'Nueva Contraseña',
+                'rnpw' => 'Nueva Contraseña'
+                ]);
+            // Caso de error, mandamos el error
+            if ($validator->fails()) {
+                return response()->json($validator->errors());
+            }
+    
+            // Datos de usuario logueado
+            $auth = getAuthh(request()->path());
+    
+            // Obtenemos los datos del usuario
+            $opw = User::find($auth->idsus);
+    
+            if(!$opw) {
+                throw new Exception('División por cero.');
+            }
+
+            // Verificando Contraseña del usuario
+            if (!Hash::check($request->input('opw'), $opw->password)) {
+                return response()->json(['error' => 'Contraseña incorrecta'], 500);
+            }
+            
+            // Verificando Igualdad de contraseñas
+            if($request->input('npw') != $request->input('rnpw')) {
+                return response()->json(['error' => 'Las contraseñas no coinciden'], 500);
+            }
+
+            // Actualizando password
+            $resp = CreateUser::abm($auth, 'CAMBIAR_PASSWORD', ["pw"=>Hash::make($request->input('npw'))]);
+
+            //$resp = CreateUser::abm($auth, 'USUARIO_ALTA', $request->input());
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+
+            //ENVIAMOS LA RESPUESTA AL FROND
+            return response()->make($resp)->header('Content-Type', 'application/json');
+
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
     }
 }

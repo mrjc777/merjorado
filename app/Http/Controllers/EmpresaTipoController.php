@@ -149,7 +149,7 @@ class EmpresaTipoController extends Controller
             $dominio = $request->getHost();
             $data['path_completo'] = 'http://'.$dominio.'/storage/archivos_ritex/solicitud_incorporacion/'.$fileName;
             $auth = getAuthh(request()->path());;
-            $resp = Producto::ArchivoSolModificacion($auth, 'CREAR', $data);
+            $resp = Producto::ArchivoSolModificacion($auth, 'CREAR_INCORPORACION', $data);
             if (isset($resp->error)) {
                 return response()->json(msgErrorQuery($resp));
             }

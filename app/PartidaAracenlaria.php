@@ -28,4 +28,18 @@ class PartidaAracenlaria extends Model
         }
     } 
 
+    public static function buscarPartida($auth, $action, $data)
+    {
+        try {
+            $sql = "select * from sp_par_buscar(?,?,?) as result";
+            return DB::select($sql, [
+                Json::encode($auth),
+                $action,
+                $data
+            ])[0]->result;
+        } catch (\Illuminate\Database\QueryException $e) {
+            return queryErrorParse($e);
+        }
+    } 
+
 }

@@ -94,4 +94,17 @@ class PartidaArancelariaController extends Controller
     {
         //
     }
+
+    public function buscarPartida(Request $request, $partida){
+        try {
+            $auth = getAuthh(request()->path());
+            $resp = PartidaAracenlaria::buscarPartida($auth, 'BUSCAR_PARTIDAS', $partida);
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (Exception $e) {
+            return response()->json(errorException($e));
+        }
+    }
 }
