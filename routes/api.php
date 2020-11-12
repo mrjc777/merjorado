@@ -72,12 +72,20 @@ Route::group(['middleware' => ['jwt.verify', 'api']], function ($router) {
     /**SOLICITUDES PDF INCORPORACION */
     Route::post('pdfprevisualizacion', 'SolicitudController@pdfPrevisualizacion');
     Route::post('pdfsolicitudconcodigo', 'SolicitudController@pdfSolicitudConCodigo');
-
-    
     /**FIN SOLICITUDES  */
+
+    /**SOLICITUDES PDF MODIFICACION */
+    
+    /**FIN SOLICITUDES */
 
     /** CAMBIO DE CONSTRASEÑA **/
     Route::post('cambiopass', 'AuthController@changePassword');
+    /** FIN CAMBIO DE CONSTRASEÑA **/
+
+    /** SERVICIO WEB ADEUDOS TRIBUTARIOS Y REGISTRO CON LA ADUANA NACIONAL **/
+    Route::post('wdsl-consulta', 'WdslController@consultaAdeudoRitex');
+    Route::post('wdsl-registro', 'WdslController@registroFormIngreso');
+    /** FIN SERVICIO WEB ADUANA NACIONAL**/
 });
 
 Route::get('empresas', 'EmpresaController@index');
