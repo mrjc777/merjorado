@@ -214,7 +214,7 @@ class WdslController extends Controller {
         $errors = [];
         $rules = [
             'tipoOperacion' => ["required", Rule::in(['0', '1'])],
-            'fechaEnvio' => 'required|date',
+            //'fechaEnvio' => 'required|date',
             'resolucionAnterior' => 'max:15',
             'datosUsuario' => 'required',
             'datosIncorporacion' => 'required',
@@ -238,7 +238,7 @@ class WdslController extends Controller {
             "apellidoMaterno" => "max:20",
             "nombre" => "required|max:25",
             "correoElectronico" => "required|email|max:50",
-            "tipoDocumento" => ["required", Rule::in(['CI', 'PAS', 'CIE'])],
+            "tipoDocumento" => ["required", Rule::in(['CI', 'PAS', 'NIT'])],
             "nroDocumento" => "required|max:15",
             "lugarExpedicion" => "max:3",
             "telefono" => "max:15",
