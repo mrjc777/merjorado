@@ -39,7 +39,8 @@ Route::group(['middleware' => ['jwt.verify', 'api']], function ($router) {
     Route::resource('productoinsumo', 'InsumoProductoController');
     Route::resource('aduanaserv', 'AduanaRitexController');
     Route::resource('empresatipo', 'EmpresaTipoController');
-    Route::post('enviar_archivo', 'EmpresaTipoController@setFile');
+    Route::post('subir_informe', 'ArchivoController@setFile');
+    Route::post('eliminar_informe', 'ArchivoController@eliminarinformes');
     Route::post('set_sol_inc', 'EmpresaTipoController@setFileSolInc');
     Route::resource('solicitud_incorporacion', 'ArchivoController');
     Route::get('previewinc', 'EmpresaTipoController@getPreview');
@@ -55,7 +56,9 @@ Route::group(['middleware' => ['jwt.verify', 'api']], function ($router) {
     Route::get('productosmod', 'ProductoController@listarproductos');
     Route::post('insertarpro', 'ProductoController@insertarproductos');
     Route::delete('eliminarpro/{id}', 'ProductoController@eliminarproductos');
-    Route::get('getfiles', 'EmpresaTipoController@getFiles');
+    Route::post('subir_informe', 'ArchivoController@setFileMod');
+    Route::post('eliminar_informe', 'ArchivoController@eliminarInformesModificacion');
+    Route::get('getfiles', 'ArchivoController@getFiles');
     /** FIN MODULO DE MODIFICACIONES*/
 
     /**

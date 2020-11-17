@@ -136,67 +136,6 @@ class EmpresaTipoController extends Controller
             return response()->json(errorException($e));
         }
     }
-    
-    /***
-     * Controlador para cargar los archivos informe pericial y otros (Solicitud de Incorporacion)
-     */
-    public function setFile(Request $request) {
-        try {
-            $data = $request->all();
-            $file_64 = $data['archivo_base64'];
-            $fileName = date('YmdHis').'.pdf';
-            Storage::disk('solicitud_incorporacion')->put($fileName, base64_decode($file_64, true));
-            $dominio = $request->getHost();
-            $data['path_completo'] = 'http://'.$dominio.'/storage/archivos_ritex/solicitud_incorporacion/'.$fileName;
-            $auth = getAuthh(request()->path());;
-            $resp = Producto::ArchivoSolModificacion($auth, 'CREAR_INCORPORACION', $data);
-            if (isset($resp->error)) {
-                return response()->json(msgErrorQuery($resp));
-            }
-            return response()->make($resp)->header('Content-Type', 'application/json');
-        } catch (\Exception $e) {
-            return response()->json(errorException($e));
-        }
-    }
-
-    /***
-     * Controlador para listar los archivos informe pericial y otros (Solicitud de Incorporacion)
-     */
-    public function getFiles() {
-        try {
-            $auth = getAuthh(request()->path());;
-            $resp = EmpresaTipo::list($auth, 'OBTENER_ARCHIVOS', []);
-            if (isset($resp->error)) {
-                return response()->json(msgErrorQuery($resp));
-            }
-            return response()->make($resp)->header('Content-Type', 'application/json');
-        } catch (\Exception $e) {
-            return response()->json(errorException($e));
-        }
-    }
-
-    /***
-     * Controlador para cargar los archivos informe pericial y otros (Solicitud de Modificacion)
-     */
-    public function setFileMod(Request $request) 
-    {
-        try {
-            $data = $request->all();
-            $file_64 = $data['archivo_base64'];
-            $fileName = date('YmdHis').'.pdf';
-            Storage::disk('solicitud_modificacion')->put($fileName, base64_decode($file_64, true));
-            $dominio = $request->getHost();
-            $data['path_completo'] = 'http://'.$dominio.'/storage/archivos_ritex/solicitud_modificacion/'.$fileName;
-            $auth = getAuthh(request()->path());;
-            $resp = Producto::ArchivoSolModificacion($auth, 'CREAR', $data);
-            if (isset($resp->error)) {
-                return response()->json(msgErrorQuery($resp));
-            }
-            return response()->make($resp)->header('Content-Type', 'application/json');
-        } catch (\Exception $e) {
-            return response()->json(errorException($e));
-        }   
-    }
 
      /***
      * Controlador para mostrar la previsualizacion de la solicitud de incorporacion
