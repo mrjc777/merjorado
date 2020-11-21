@@ -36,14 +36,17 @@ Route::group(['middleware' => ['jwt.verify', 'api']], function ($router) {
     Route::resource('almacenes', 'AlmacenController');
     Route::resource('insumos', 'InsumoController');
     Route::resource('productos', 'ProductoController');
+    Route::delete('productosinsumotipo/{idpro}/{idins}/{tipo}', 'InsumoProductoController@eliminarTipoProductoInsumo');
     Route::resource('productoinsumo', 'InsumoProductoController');
     Route::resource('aduanaserv', 'AduanaRitexController');
     Route::resource('empresatipo', 'EmpresaTipoController');
-    Route::post('subir_informe', 'ArchivoController@setFile');
-    Route::post('eliminar_informe', 'ArchivoController@eliminarinformes');
+    Route::post('subir_informe_inc', 'ArchivoController@setFile');
+    Route::get('getfiles', 'ArchivoController@getFiles');
+    Route::delete('eliminar_informe_inc/{id}', 'ArchivoController@eliminarinformes');
     Route::post('set_sol_inc', 'EmpresaTipoController@setFileSolInc');
     Route::resource('solicitud_incorporacion', 'ArchivoController');
     Route::get('previewinc', 'EmpresaTipoController@getPreview');
+    Route::get('listargenerados', 'SolicitudController@listarSolicitudesGeneradasEmpresa');
      /** FIN MODULO DE INCORPORACIONES */
 
     /** MODULO DE OPERACIONES SOLICITUD DE MODIFICACION*/
@@ -56,16 +59,17 @@ Route::group(['middleware' => ['jwt.verify', 'api']], function ($router) {
     Route::get('productosmod', 'ProductoController@listarproductos');
     Route::post('insertarpro', 'ProductoController@insertarproductos');
     Route::delete('eliminarpro/{id}', 'ProductoController@eliminarproductos');
-    Route::post('subir_informe', 'ArchivoController@setFileMod');
-    Route::post('eliminar_informe', 'ArchivoController@eliminarInformesModificacion');
-    Route::get('getfiles', 'ArchivoController@getFiles');
+    Route::post('subir_informe_mod', 'ArchivoController@setFileMod');
+    Route::delete('eliminar_informe_mod/{id}', 'ArchivoController@eliminarInformesModificacion');
+    Route::get('getfilesmod', 'ArchivoController@getFilesMod');
     /** FIN MODULO DE MODIFICACIONES*/
 
     /**
      * MODULO DE OPERACIONES DEL TECNICO VCI*/
     Route::resource('crearuser', 'CreateUserController');
     Route::resource('observacion', 'ObservacionController');  //OBSERVACION DE LAS SOLICITUDES
-    Route::resource('solicitudes', 'SolicitudController'); //OBTIENE LAS SOLICITUDES REGISTRADAS EN SISTEMA
+    Route::resource('solicitudes_incorporacion', 'SolicitudController'); //OBTIENE LAS SOLICITUDES DE INCORPORACION REGISTRADAS EN SISTEMA
+    Route::get('solicitudes_modificacion', 'SolicitudController@listar'); //OBTIENE LAS SOLICITUDES DE MODIFICACION REGISTRADAS EN SISTEMA
     Route::resource('cargarsolicitud', 'ArchivoController'); //CARGA LA SOLICITUD FIRMADA POR LA EMPRESA (COMPLETAR)
     Route::resource('aprobar', 'AprobarController'); //APRUEBA LAS SOLICITUDES
     //Route::post('reporteresolucion', 'AprobarController@reporteResolucion'); //resporte resolucion  
@@ -78,7 +82,8 @@ Route::group(['middleware' => ['jwt.verify', 'api']], function ($router) {
     /**FIN SOLICITUDES  */
 
     /**SOLICITUDES PDF MODIFICACION */
-    
+    Route::post('pdfprevisualizacionmodificacion', 'SolicitudController@pdfPrevisualizacionModificacion');
+    Route::post('pdfsolicitudconcodigomodificacion', 'SolicitudController@pdfSolicitudConCodigoModificacion');
     /**FIN SOLICITUDES */
 
     /** CAMBIO DE CONSTRASEÑA **/

@@ -102,22 +102,7 @@ class ProductoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        try {
-            $input = [
-                'idpro' => $id
-            ];
-            $auth = getAuthh(request()->path());
-            $resp = Producto::abm($auth, 'ELIMINAR', $input);
-            if (isset($resp->error)) {
-                return response()->json(msgErrorQuery($resp));
-            }
-            return response()->make($resp)->header('Content-Type', 'application/json');
-        } catch (\Exception $e) {
-            return response()->json(errorException($e));
-        }
-    }
+    public function destroy($id){}
 
     /**
      * FUNCIONES PERSONALIZADAS PARA SOLICITUD DE MODIFICACION 

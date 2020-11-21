@@ -19,7 +19,7 @@ class Solicitud extends Model
      public static function list($auth, $action, $data = []) 
     {
         try {
-            $sql = "select * from sp_soli_list(?,?,?) as result";
+            $sql = "select * from sp_solicitudes_incorporacion_list(?,?,?) as result";
             return DB::select($sql, [
                 Json::encode($auth),
                 $action,
@@ -55,7 +55,7 @@ class Solicitud extends Model
     public static function listMod($auth, $action, $data = []) 
     {
         try {
-            $sql = "select * from sp_sol_mod_list(?,?,?) as result";
+            $sql = "select * from sp_solicitudes_modificacion_list(?,?,?) as result";
             return DB::select($sql, [
                 Json::encode($auth),
                 $action,
@@ -84,11 +84,10 @@ class Solicitud extends Model
     }
 
     /***
-     * Previsualizacion de Solicitud  sin codigo
+     * Previsualizacion de Solicitud  sin codigo generado
      */
     public static function previsualizacionPDF($auth, $action, $data=[]){
         try {
-            //cambiar el nombre de la funcion (sp_datos_print_raincorporacion)
             $sql = "select * from sp_datos_print_raincorporacion(?,?,?) as result";
             return DB::select($sql, [
                 Json::encode($auth),
@@ -101,11 +100,26 @@ class Solicitud extends Model
     }
 
     /***
-     * Previsualizacion de Solicitud  sin codigo
+     * Listar todas las solicitudes realizadas por la empresa
+     */
+    public static function getSolicitudesGeneradas($auth, $action, $data=[]){
+        try {
+            $sql = "select * from sp_soli_abm(?,?,?) as result";
+            return DB::select($sql, [
+                Json::encode($auth),
+                $action,
+                Json::encode($data)
+            ])[0]->result;
+        } catch (\Illuminate\Database\QueryException $e) {
+            return queryErrorParse($e);
+        }
+    }
+
+    /***
+     * Previsualizacion de Solicitud  con codigo generado
      */
     public static function pdfSolicitudConCodigo($auth, $action, $data=[]){
         try {
-            //cambiar el nombre de la funcion (sp_datos_print_raincorporacion)
             $sql = "select * from sp_soli_abm(?,?,?) as result";
             return DB::select($sql, [
                 Json::encode($auth),

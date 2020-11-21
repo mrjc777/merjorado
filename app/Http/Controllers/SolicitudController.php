@@ -9,21 +9,21 @@ use App\Solicitud;
 class SolicitudController extends Controller
 {
     /**
-     * Contrcutor,
+     * Constrcutor,
      */
-    public function __contruct() {
+    public function __construct() {
         $this->middleware('auth:api');
     }
+
     /**
-     * Display a listing of the resource.
-     *
+     * Listar solicitudes de incorporacion con codigos generados, solo para el usuario tecnico ritex
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
         try {
             $auth = getAuthh(request()->path());
-            $resp = Solicitud::list($auth, 'LISTAR', []);
+            $resp = Solicitud::list($auth, 'LISTAR_SOLICITUDES_INCORPORACION', []);
             if (isset($resp->error)) {
                 return response()->json(msgErrorQuery($resp));
             }
@@ -34,18 +34,7 @@ class SolicitudController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
-     *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
@@ -63,6 +52,9 @@ class SolicitudController extends Controller
         }
     }
 
+    /**
+     * Funcion para realizar la observacion por parte usuario tecnico
+     */
     public function observar(Request $request)
     {
         try {
@@ -75,46 +67,10 @@ class SolicitudController extends Controller
         } catch (\Exception $e) {
             return response()->json(errorException($e));
         }
-        
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
-     *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -136,17 +92,32 @@ class SolicitudController extends Controller
     }
 
     /**
-     * FUNCIONES PARA LA SOLICITUD DE MODIFICACIONES
+     * Funcion que se encarga de listar todas las solicitudes generadas
+     * con codigo por parte de la empresa.
      */
+    public function listarSolicitudesGeneradasEmpresa()
+    {
+        try {
+            $auth = getAuthh(request()->path());
+            $resp = Solicitud::getSolicitudesGeneradas($auth, 'LISTAR_SOLICITUDES_GENERADAS', []);
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
+    }
 
-     /**
-      * LISTAR SOLICITUDES DE MODIFICACION
-      */
+    /**
+     * FUNCIONES PARA LA SOLICITUD DE MODIFICACIONES
+      * LISTAR SOLICITUDES DE MODIFICACION, SOLO PARA EL USUARIO TECNICO
+    */
     public function listar()
     {
         try {
             $auth = getAuthh(request()->path());
-            $resp = Solicitud::list($auth, 'LISTAR_SOLICITUD_MODIFICACION', []);
+            $resp = Solicitud::listMod($auth, 'LISTAR_SOLICITUDES_MODIFICACION', []);
             if (isset($resp->error)) {
                 return response()->json(msgErrorQuery($resp));
             }
@@ -182,7 +153,7 @@ class SolicitudController extends Controller
             $data = $request->all();
             $auth = getAuthh(request()->path());
             //$resp = Solicitud::previsualizacionPDF($auth, 'DATOS_PRINT_INC', $data);
-          
+
             $data['solicitud_fecha'] = $this->formatFecha(date('Y-m-d'));
             $data['codigo_solicitud'] = "-";
             //$pdf = PDF::loadView('reportes.solicitud', compact('data', 'resp'));
@@ -204,7 +175,7 @@ class SolicitudController extends Controller
     }
 
     /**
-     * Funcion que se encarga de cargar el PDF de la Solicitud (Incorporacion), 
+     * Funcion que se encarga de cargar el PDF de la Solicitud (Incorporacion),
      * con CODIGO por parte de la empresa
      */
     public function pdfSolicitudConCodigo(Request $request){
@@ -213,7 +184,72 @@ class SolicitudController extends Controller
             $auth = getAuthh(request()->path());
             $resp = Solicitud::pdfSolicitudConCodigo($auth, 'CREAR_SOLICITUD', $data);
             $response = json_decode($resp, true);
-          
+
+            $data['solicitud_fecha'] = $this->formatFecha(date('Y-m-d'));
+            $data['codigo_solicitud'] = "SRT Nro. 0001/2020";
+            //$pdf = PDF::loadView('reportes.solicitud', compact('data', 'resp'));
+            $pdf = PDF::loadView('reportes.solicitud', compact('data'));
+            $reporte = $pdf->output();
+            $fileName = 'solicitud' . date('YmdHis') . '.pdf';
+            Storage::disk('temporales')->put($fileName, $reporte);
+
+            $dominio = $request->getHost();
+            $sol = [
+                "url" => "http://" . $dominio . "/storage/archivos_ritex/temporales/" . $fileName,
+                "solicitud_pk" => $response['data']
+            ];
+            $resp = [
+                "type" => "success",
+                "message" => "Archivo de solicitud de incorporacion con Codigo",
+                "data" => $sol
+            ];
+            return response()->make(json_encode($resp))->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
+    }
+
+/**
+     * Funcion que se encarga de cargar el PDF de Previsualizacion
+     * de la Solicitud (Modificacion), por parte de la empresa
+     */
+    public function pdfPrevisualizacionModificacion(Request $request){
+        try {
+            $data = $request->all();
+            $auth = getAuthh(request()->path());
+            //$resp = Solicitud::previsualizacionPDF($auth, 'DATOS_PRINT_INC', $data);
+
+            $data['solicitud_fecha'] = $this->formatFecha(date('Y-m-d'));
+            $data['codigo_solicitud'] = "-";
+            //$pdf = PDF::loadView('reportes.solicitud', compact('data', 'resp'));
+            $pdf = PDF::loadView('reportes.solicitud', compact('data'));
+            $reporte = $pdf->output();
+            $fileName = 'solicitud' . date('YmdHis') . '.pdf';
+            Storage::disk('temporales')->put($fileName, $reporte);
+
+            $dominio = $request->getHost();
+            $resp = [
+                "type" => "success",
+                "message" => "Archivo de solicitud sin codigo generado",
+                "data" => "http://" . $dominio . "/storage/archivos_ritex/temporales/" . $fileName
+            ];
+            return response()->make(json_encode($resp))->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
+    }
+
+    /**
+     * Funcion que se encarga de cargar el PDF de la Solicitud (Modificacion),
+     * con CODIGO por parte de la empresa
+     */
+    public function pdfSolicitudConCodigoModificacion(Request $request){
+        try {
+            $data = $request->all();
+            $auth = getAuthh(request()->path());
+            $resp = Solicitud::pdfSolicitudConCodigo($auth, 'CREAR_SOLICITUD', $data);
+            $response = json_decode($resp, true);
+
             $data['solicitud_fecha'] = $this->formatFecha(date('Y-m-d'));
             $data['codigo_solicitud'] = "SRT Nro. 0001/2020";
             //$pdf = PDF::loadView('reportes.solicitud', compact('data', 'resp'));

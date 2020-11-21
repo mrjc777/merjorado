@@ -74,7 +74,15 @@ return [
 
         'informe' => [
             'driver' => 'local',
-            'root' => storage_path('app/public/archivos_ritex/informes'),
+            'root' => public_path('app/public/archivos_ritex/informes'),
+            'url' => env('APP_URL'). '/storage',
+            'visibility' => 'public',
+
+        ],
+
+        'informes_periciales' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/archivos_ritex/informes_periciales'),
             'url' => env('APP_URL'). '/storage',
             'visibility' => 'public',
 
