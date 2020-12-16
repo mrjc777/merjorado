@@ -7,10 +7,14 @@ use App\Observacion;
 class ObservacionController extends Controller
 {
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Contrcutor,
+     */
+    public function __contruct()
+    {
+        $this->middleware('auth:api');
+    }
+    /**
+     * ABM DE LAS OBSERVACIONES 
      */
     public function store(Request $request)
     {

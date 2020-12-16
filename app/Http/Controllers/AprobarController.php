@@ -68,6 +68,7 @@ class AprobarController extends Controller
             if (isset($resp->error)) {
                 return response()->json(msgErrorQuery($resp));
             }
+            //
             return response()->make($resp)->header('Content-Type', 'application/json');
         } catch (\Exception $e) {
             return response()->json(errorException($e));

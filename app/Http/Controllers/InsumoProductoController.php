@@ -52,6 +52,9 @@ class InsumoProductoController extends Controller
         }
     }
 
+    /**
+     * ELIMINAR COMBINACION INSUMO PRODUCTO ROL DE AL EMPRESA PARA SOLICITUD DE INCORPORACION 
+     */
     public function eliminarTipoProductoInsumo($idpro, $idins, $tipo)
     {
         try {
@@ -62,6 +65,28 @@ class InsumoProductoController extends Controller
             ];
             $auth = getAuthh(request()->path());
             $resp = Producto::abm($auth, 'ELIMINAR', $input);
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
+    }
+
+    /**
+     * ELIMINAR COMBINACION INSUMO PRODUCTO ROL DE AL EMPRESA PARA SOLICITUD DE MODIFICACION
+     */
+    public function eliminarTipoProductoInsumoModificacion($idpro, $idins, $tipo)
+    {
+        try {
+            $input = [
+                'idpro' => $idpro,
+                'idins' => $idins,
+                'tipo' => $tipo
+            ];
+            $auth = getAuthh(request()->path());
+            $resp = Producto::abmProductosInsumos($auth, 'ELIMINAR_INSUMOS_PRODUCTOS_MODIFICACION', $input);
             if (isset($resp->error)) {
                 return response()->json(msgErrorQuery($resp));
             }

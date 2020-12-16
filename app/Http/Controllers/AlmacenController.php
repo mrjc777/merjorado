@@ -13,9 +13,7 @@ class AlmacenController extends Controller
         $this->middleware('auth:api');
     }
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * LISTAR almacen o instalacion por el rol de la empresa en solicitud de incorporacion
      */
     public function index()
     {
@@ -32,20 +30,8 @@ class AlmacenController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * ABM nuevo almacen o instalacion por el rol de la empresa en solicitud de incorporacion.
      *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
@@ -62,44 +48,7 @@ class AlmacenController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * ABM eliminar almacen o instalacion por el rol de la empresa en solicitud de incorporacion
      */
     public function destroy($id)
     {
@@ -123,7 +72,7 @@ class AlmacenController extends Controller
      */
 
     /**
-     * LISTAR ALMACENES PARA SOLICITUD DE MODIFICACION
+     * LISTAR almacen o instalacion por el rol de la empresa en solicitud de modificacion
      */
 
      public function listaralmacenes()
@@ -141,7 +90,7 @@ class AlmacenController extends Controller
      }
 
      /**
-      * INSERTAR ALMACENES PARA SOLICITUD DE MODIFICACION
+      * ABM nuevo almacen o instalacion por el rol de la empresa en solicitud de modificacion.
       */
     
       public function insertaralmacenes(Request $request)
@@ -159,7 +108,7 @@ class AlmacenController extends Controller
     }
 
     /**
-      * ELIMINACION LOGICA DE ALMACENES EN SOLICITUD DE MODIFICACION
+      * ABM eliminar almacen o instalacion por el rol de la empresa en solicitud de modificacion.
       */
 
       public function eliminaralmacenes($id)

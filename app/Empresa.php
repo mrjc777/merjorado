@@ -61,4 +61,21 @@ class Empresa extends Model
             return queryErrorParse($e);
         }
     }
+
+    /**
+     * LISTADO DE USUARIOS HABILITADOS PARA EL ROL TECNICO
+     */
+    public static function listarUsuariosHabilitados($auth, $action, $data = []) 
+    {
+        try {
+            $sql = "select * from sp_empresas_habilitadas_tecnico_listar(?,?,?) as result";
+            return DB::select($sql, [
+                Json::encode($auth),
+                $action,
+                Json::encode($data)
+            ])[0]->result;
+        } catch (\Illuminate\Database\QueryException $e) {
+            return queryErrorParse($e);
+        }
+    }
 }

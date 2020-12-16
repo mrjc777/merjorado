@@ -14,9 +14,7 @@ class InsumoController extends Controller
         $this->middleware('auth:api');
     }
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * LISTAR insumos rol empresa para solicitud de incorporacion
      */
     public function index()
     {
@@ -33,20 +31,7 @@ class InsumoController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * //ABM, insumos rol empresa para solicitud de incorporacion
      */
     public function store(Request $request)
     {
@@ -63,44 +48,7 @@ class InsumoController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * ABM, insumos rol empresa para solicitud de incorporacion
      */
     public function destroy($id)
     {
@@ -122,7 +70,10 @@ class InsumoController extends Controller
     /**
      * FUNCIONES PERSONALIZADAS PARA SOLICITUD DE MODIFICACION 
      */
-
+    
+     /**
+     * LISTAR insumos rol empresa para solicitud de modificacion 
+     */
      public function listarinsumos()
      {
         try {
@@ -138,7 +89,7 @@ class InsumoController extends Controller
      }
 
      /**
-      * INSERTAR INSUMOS PARA SOLICITUD DE MODIFICACION
+      * ABM insumos rol empresa para solicitud de modificacion 
       */
      
      public function insertarinsumos(Request $request)
@@ -156,7 +107,7 @@ class InsumoController extends Controller
      }
 
      /**
-      * ELIMINACION LOGICA DE INSUMOS EN SOLICITUD DE MODIFICACION
+      * ABM insumos rol empresa para solicitud de modificacion
       */
 
       public function eliminarainsumos($id)

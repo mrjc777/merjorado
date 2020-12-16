@@ -12,7 +12,7 @@ class Solicitud extends Model
     protected $timestamp = false;
 
     /**
-     * lISTADO DE DATOS PARA LA TABLA SOLICITUDES INCORPORACION
+     * lISTADO DE DATOS PARA LA TABLA SOLICITUDES INCORPORACION DEL USUARIO TECNICO
      * 
      */
     
@@ -20,6 +20,61 @@ class Solicitud extends Model
     {
         try {
             $sql = "select * from sp_solicitudes_incorporacion_list(?,?,?) as result";
+            return DB::select($sql, [
+                Json::encode($auth),
+                $action,
+                Json::encode($data)
+            ])[0]->result;
+        } catch (\Illuminate\Database\QueryException $e) {
+            return queryErrorParse($e);
+        }
+    }
+
+    /**
+     * lISTADO DE DATOS PARA LA TABLA SOLICITUDES MODIFICACION DEL USUARIO TECNICO
+     * 
+     */
+    
+    public static function listarSolicitudesModificacionesTecnico($auth, $action, $data = []) 
+    {
+        try {
+            $sql = "select * from sp_solicitudes_modificacion_list(?,?,?) as result";
+            return DB::select($sql, [
+                Json::encode($auth),
+                $action,
+                Json::encode($data)
+            ])[0]->result;
+        } catch (\Illuminate\Database\QueryException $e) {
+            return queryErrorParse($e);
+        }
+    }
+
+    /**
+     * LISTADO DE DATOS PARA LA TABLA SOLICITUDES AMPLIACION DE PLAZO DEL USUARIO TECNICO 
+     */
+    public static function listarSolicitudesAmpliacionTecnico($auth, $action, $data = []) 
+    {
+        try {
+            $sql = "select * from sp_solicitud_ampliacion_plazo_listar(?,?,?) as result";
+            return DB::select($sql, [
+                Json::encode($auth),
+                $action,
+                Json::encode($data)
+            ])[0]->result;
+        } catch (\Illuminate\Database\QueryException $e) {
+            return queryErrorParse($e);
+        }
+    }
+
+    /**
+     * lISTADO DE DATOS PARA LA TABLA SOLICITUDES RETIRO VOLUNTARIO DEL USUARIO TECNICO
+     * 
+     */
+    
+    public static function listarSolicitudesRetiroTecnico($auth, $action, $data = []) 
+    {
+        try {
+            $sql = "select * from sp_solicitud_retiro_voluntario_listar(?,?,?) as result";
             return DB::select($sql, [
                 Json::encode($auth),
                 $action,
@@ -100,7 +155,7 @@ class Solicitud extends Model
     }
 
     /***
-     * Listar todas las solicitudes realizadas por la empresa
+     * Listar todas las solicitudes de incorporacion realizadas por la empresa
      */
     public static function getSolicitudesGeneradas($auth, $action, $data=[]){
         try {
@@ -115,8 +170,56 @@ class Solicitud extends Model
         }
     }
 
+     /***
+     * Listar todas las solicitudes de modificacion realizadas por la empresa
+     */
+    public static function getSolicitudesModificacionGeneradas($auth, $action, $data=[]){
+        try {
+            $sql = "select * from sp_sol_mod_abm(?,?,?) as result";
+            return DB::select($sql, [
+                Json::encode($auth),
+                $action,
+                Json::encode($data)
+            ])[0]->result;
+        } catch (\Illuminate\Database\QueryException $e) {
+            return queryErrorParse($e);
+        }
+    }
+
     /***
-     * Previsualizacion de Solicitud  con codigo generado
+     * Listar todas las solicitudes de ampliacion de plazo realizadas por la empresa
+     */
+    public static function getSolicitudesAmpliacionGeneradas($auth, $action, $data=[]){
+        try {
+            $sql = "select * from sp_solicitud_ampliacion_plazo_abm(?,?,?) as result";
+            return DB::select($sql, [
+                Json::encode($auth),
+                $action,
+                Json::encode($data)
+            ])[0]->result;
+        } catch (\Illuminate\Database\QueryException $e) {
+            return queryErrorParse($e);
+        }
+    }
+
+     /***
+     * Listar todas las solicitudes de retiro voluntario realizadas por la empresa
+     */
+    public static function getSolicitudesRetiroGeneradas($auth, $action, $data=[]){
+        try {
+            $sql = "select * from sp_solicitud_retiro_voluntario_abm(?,?,?) as result";
+            return DB::select($sql, [
+                Json::encode($auth),
+                $action,
+                Json::encode($data)
+            ])[0]->result;
+        } catch (\Illuminate\Database\QueryException $e) {
+            return queryErrorParse($e);
+        }
+    }
+
+    /***
+     * Generar Solicitud con codigo para Incorporacion
      */
     public static function pdfSolicitudConCodigo($auth, $action, $data=[]){
         try {
@@ -129,5 +232,53 @@ class Solicitud extends Model
         } catch (\Illuminate\Database\QueryException $e) {
             return queryErrorParse($e);
         }
-    }    
+    }
+    
+    /***
+     * Generar Solicitud con codigo para Modificacion
+     */
+    public static function pdfSolicitudConCodigoMod($auth, $action, $data=[]){
+        try {
+            $sql = "select * from sp_sol_mod_abm(?,?,?) as result";
+            return DB::select($sql, [
+                Json::encode($auth),
+                $action,
+                Json::encode($data)
+            ])[0]->result;
+        } catch (\Illuminate\Database\QueryException $e) {
+            return queryErrorParse($e);
+        }
+    }
+
+    /***
+     * Generar Solicitud con codigo para Ampliacion de Plazo
+     */
+    public static function pdfSolicitudConCodigoAmpliacion($auth, $action, $data=[]){
+        try {
+            $sql = "select * from sp_solicitud_ampliacion_plazo_abm(?,?,?) as result";
+            return DB::select($sql, [
+                Json::encode($auth),
+                $action,
+                Json::encode($data)
+            ])[0]->result;
+        } catch (\Illuminate\Database\QueryException $e) {
+            return queryErrorParse($e);
+        }
+    }
+
+     /***
+     * Generar Solicitud con codigo para Retiro Voluntario
+     */
+    public static function pdfSolicitudConCodigoRetiro($auth, $action, $data=[]){
+        try {
+            $sql = "select * from sp_solicitud_retiro_voluntario_abm(?,?,?) as result";
+            return DB::select($sql, [
+                Json::encode($auth),
+                $action,
+                Json::encode($data)
+            ])[0]->result;
+        } catch (\Illuminate\Database\QueryException $e) {
+            return queryErrorParse($e);
+        }
+    }
 }

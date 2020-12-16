@@ -35,12 +35,28 @@ class Producto extends Model
     }
 
     /**
-     * Altas, bajas, modificaciones en la tabla productos
+     * Altas, bajas, modificaciones en la tabla productos solicitud de incorporacion
      */
     public static function abm($auth, $action, $data = [])
     {
         try {
             $sql = "select * from sp_pro_abm(?,?,?) as result";
+            return DB::select($sql, [
+                Json::encode($auth),
+                $action,
+                Json::encode($data)
+            ])[0]->result;
+        } catch (\Illuminate\Database\QueryException $e) {
+            return queryErrorParse($e);
+        }
+    }
+    /**
+     * Altas, bajas, modificaciones en la tabla productos solicitud de modificacion
+     */
+    public static function abmProductosInsumos($auth, $action, $data = [])
+    {
+        try {
+            $sql = "select * from sp_pro_mod_abm(?,?,?) as result";
             return DB::select($sql, [
                 Json::encode($auth),
                 $action,
