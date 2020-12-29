@@ -64,6 +64,22 @@ return [
 
         ],
 
+        'solicitud_ampliacion' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/archivos_ritex/solicitud_ampliacion'),
+            'url' => env('APP_URL'). '/storage',
+            'visibility' => 'public',
+
+        ],
+
+        'solicitud_retiro' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/archivos_ritex/solicitud_retiro'),
+            'url' => env('APP_URL'). '/storage',
+            'visibility' => 'public',
+
+        ],
+
         'resolucion' => [
             'driver' => 'local',
             'root' => public_path('app/public/archivos_ritex/resoluciones'),

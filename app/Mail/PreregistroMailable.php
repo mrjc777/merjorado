@@ -7,20 +7,19 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class PreregistroMailable extends Mailable
+class PreRegistroMailable extends Mailable
 {
     use Queueable, SerializesModels;
-
-    public $subject = "Información Pre Registro RITEX";
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($data)
     {
         //
+        $this->data = $data;
     }
 
     /**
@@ -30,6 +29,6 @@ class PreregistroMailable extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.preregistro');
+        return $this->view('emails.pre-registro');
     }
 }

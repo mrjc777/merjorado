@@ -68,10 +68,12 @@ class WdslController extends Controller {
             $input = (object) $request->all();
             // GENERACION DEL XML DE CONSULTA DEUDA
             $consultaDeuda = ArrayToXml::convert([
+            
                 'tipoDocumento' => $input->tipoDocumento,
                 'nroDocumento' => $input->nroDocumento,
                 'lugarExpedicion' => $input->lugarExpedicion
             ], 'consultadeuda', true, 'UTF-8', '1.0', [], true);
+            //dd($consultaDeuda);
 
             // ENCRIPTAMOS LA PETICION
             if (!openssl_private_encrypt($consultaDeuda, $enc, $this->privateKey)) {
@@ -105,6 +107,7 @@ class WdslController extends Controller {
 
             // CONVERTIMOS LA RESPUESTA XML EN ARRAY ITERABLE
             $objectXML = simplexml_load_string($response);
+            //dd($objectXML);
             $responseArray = (object) json_decode(json_encode($objectXML), true);
             // VERIFICAMOS LOS CODIGOS DE ERROR
             if (in_array($responseArray->resultado['codError'], ['1', '2', '3'])) {

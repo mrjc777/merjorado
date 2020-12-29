@@ -8,32 +8,10 @@ use App\Solicitud;
 
 class ArchivoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+     * CARGAR LA SOLICITUD DE INCORPORACION RITEX FIRMADA DIGITALMENTE
+    */
     public function store(Request $request)
     {
        try {
@@ -45,6 +23,78 @@ class ArchivoController extends Controller
             $data['path_completo'] = 'http://'.$dominio.'/storage/archivos_ritex/solicitud_incorporacion/'.$fileName;
             $auth = getAuthh(request()->path());;
             $resp = Archivo::solIncorporacion($auth, 'CARGAR_SOLICITUD_INC', $data);
+
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
+    }
+
+    /**
+     * CARGAR LA SOLICITUD DE MODIFICACION RITEX FIRMADA DIGITALMENTE
+    */
+    public function cargarSolicitudModificacion(Request $request)
+    {
+       try {
+            $data = $request->all();
+            $file_64 = $data['archivo_base64'];
+            $fileName = date('YmdHis').'.pdf';
+            Storage::disk('solicitud_modificacion')->put($fileName, base64_decode($file_64, true));
+            $dominio = $request->getHost();
+            $data['path_completo'] = 'http://'.$dominio.'/storage/archivos_ritex/solicitud_modificacion/'.$fileName;
+            $auth = getAuthh(request()->path());;
+            $resp = Archivo::solModificacion($auth, 'CARGAR_SOLICITUD_MOD', $data);
+
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
+    }
+
+     /**
+     * CARGAR LA SOLICITUD DE AMPLIACION DE PLAZO RITEX FIRMADA DIGITALMENTE
+    */
+    public function cargarSolicitudAmpliacion(Request $request)
+    {
+       try {
+            $data = $request->all();
+            $file_64 = $data['archivo_base64'];
+            $fileName = date('YmdHis').'.pdf';
+            Storage::disk('solicitud_ampliacion')->put($fileName, base64_decode($file_64, true));
+            $dominio = $request->getHost();
+            $data['path_completo'] = 'http://'.$dominio.'/storage/archivos_ritex/solicitud_ampliacion/'.$fileName;
+            $auth = getAuthh(request()->path());;
+            $resp = Archivo::solAmpliacion($auth, 'CARGAR_SOLICITUD_AMP', $data);
+
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
+    }
+
+    /**
+     * CARGAR LA SOLICITUD DE RETIRO VOLUNTARIO RITEX FIRMADA DIGITALMENTE
+    */
+    public function cargarSolicitudRetiro(Request $request)
+    {
+       try {
+            $data = $request->all();
+            $file_64 = $data['archivo_base64'];
+            $fileName = date('YmdHis').'.pdf';
+            Storage::disk('solicitud_retiro')->put($fileName, base64_decode($file_64, true));
+            $dominio = $request->getHost();
+            $data['path_completo'] = 'http://'.$dominio.'/storage/archivos_ritex/solicitud_retiro/'.$fileName;
+            $auth = getAuthh(request()->path());;
+            $resp = Archivo::solRetiro($auth, 'CARGAR_SOLICITUD_RET', $data);
 
             if (isset($resp->error)) {
                 return response()->json(msgErrorQuery($resp));

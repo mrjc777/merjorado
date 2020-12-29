@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AlmacenController;
+use App\Http\Controllers\AprobarController;
 use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\EmpresaTipoController;
 use App\Http\Controllers\InsumoProductoController;
@@ -50,6 +51,7 @@ Route::group(['middleware' => ['jwt.verify', 'api']], function ($router) {
     //Route::post('set_sol_inc', 'EmpresaTipoController@setFileSolInc');
     Route::resource('solicitud_incorporacion', 'ArchivoController');
     Route::get('previewinc', 'EmpresaTipoController@getPreview');
+    Route::resource('cargarsolicitud', 'ArchivoController'); //CARGA LA SOLICITUD INCORPORACION FIRMADA POR LA EMPRESA
     Route::get('listargenerados', 'SolicitudController@listarSolicitudesGeneradasEmpresa');
      /** FIN MODULO DE INCORPORACIONES */
 
@@ -67,16 +69,19 @@ Route::group(['middleware' => ['jwt.verify', 'api']], function ($router) {
     Route::post('subir_informe_mod', 'ArchivoController@setFileMod');//CARGAR ARCHIVOS, Informe Pericial y otros
     Route::get('getfilesmod', 'ArchivoController@getFilesMod');//LISTAR ARCHIVOS, Informe Pericial y otros.
     Route::delete('eliminar_informe_mod/{id}', 'ArchivoController@eliminarInformesModificacion');//ELIMINAR ARCHIVO, Informe Pericial y otros.
+    Route::post('cargarsolicitud_modificacion', 'ArchivoController@cargarSolicitudModificacion'); //CARGA LA SOLICITUD MODIFICACION FIRMADA POR LA EMPRESA.
     Route::get('listar_generados_modificacion', 'SolicitudController@listarSolicitudesModificacionGeneradasEmpresa');
     /** FIN MODULO DE MODIFICACIONES*/
 
     /** MODULO DE OPERACIONES SOLICITUD DE AMPLIACION DE PLAZO ROL EMPRESA */
     Route::resource('ampliacion_plazo', 'AmpliacionPlazoController'); //ABM, LISTAR REGISTRO PARA AMPLIACION DE PLAZO 
+    Route::post('cargarsolicitud_ampliacion', 'ArchivoController@cargarSolicitudAmpliacion'); //CARGA LA SOLICITUD DE RETIRO FIRMADA POR LA EMPRESA.
     Route::get('listar_generados_ampliacion', 'SolicitudController@listarSolicitudesAmpliacionGeneradasEmpresa'); 
     /* FIN MODULO DE AMPLIACION DE PLAZO */
 
     /** MODULO DE OPERACIONES SOLICITUD DE RETIRO VOLUNTARIO ROL EMPRESA */
     Route::resource('justificacion_retiro_voluntario', 'RetiroVoluntarioController'); //ABM, LISTAR JUSTIFICACION PARA RETIRO VOLUNTARIO
+    Route::post('cargarsolicitud_retiro', 'ArchivoController@cargarSolicitudRetiro'); //CARGA LA SOLICITUD DE RETIRO FIRMADA POR LA EMPRESA.
     Route::get('listar_generados_retiro', 'SolicitudController@listarSolicitudesRetiroGeneradasEmpresa');
     /* FIN MODULO DE RETIRO VOLUNTARIO */
 
@@ -88,10 +93,15 @@ Route::group(['middleware' => ['jwt.verify', 'api']], function ($router) {
     Route::resource('observacion', 'ObservacionController');  //OBSERVAR SOLICITUDES
     Route::resource('solicitudes_incorporacion', 'SolicitudController'); //OBTIENE LAS SOLICITUDES DE INCORPORACION REGISTRADAS EN SISTEMA
     Route::get('solicitudes_modificacion', 'SolicitudController@listarSolicitudesTecnico'); //OBTIENE LAS SOLICITUDES DE MODIFICACION REGISTRADAS EN SISTEMA
+    Route::get('solicitudes_ampliacion', 'SolicitudController@listarSolicitudesAmpliacionTecnico'); //OBTIENE LAS SOLICITUDES DE AMPLIACION DE PLAZO REGISTRADAS EN SISTEMA
+    Route::get('solicitudes_retiro', 'SolicitudController@listarSolicitudesRetiroTecnico'); //OBTIENE LAS SOLICITUDES DE RETIRO VOLUNTARIO REGISTRADAS EN SISTEMA
     Route::delete('eliminar_solicitud_modificacion/{id}', 'SolicitudController@eliminarSolicitudModificacion'); // ELIINAR SOLICITUD DE MODIFICAICON POR EL TECNICO
-    Route::resource('cargarsolicitud', 'ArchivoController'); //CARGA LA SOLICITUD FIRMADA POR LA EMPRESA (COMPLETAR)
-    Route::resource('aprobar', 'AprobarController'); //APRUEBA LAS SOLICITUDES
-    //Route::post('reporteresolucion', 'AprobarController@reporteResolucion'); //resporte resolucion  
+    Route::delete('eliminar_solicitud_ampliacion/{id}', 'SolicitudController@eliminarSolicitudAmpliacion'); // ELIMINAR SOLICITUD DE AMPLIACION POR EL TECNICO
+    Route::delete('eliminar_solicitud_retiro/{id}', 'SolicitudController@eliminarSolicitudRetiro'); // ELIMINAR SOLICITUD DE RETIRO VOLUNTARIO POR EL TECNICO
+    Route::resource('aprobar', 'AprobarController'); //APROBAR SOLICITUDES DE INCORPORACION
+    Route::post('aprobar_modificacion', 'AprobarController@aprobarSolicitudModificacion');//APROBAR SOLICITUDES DE MODIFICACION
+    Route::post('aprobar_ampliacion', 'AprobarController@aprobarSolicitudAmpliacion');//APROBAR SOLICITUDES DE AMPLIACION DE PLAZO
+    Route::post('aprobar_retiro', 'AprobarController@aprobarSolicitudRetiro');//APROBAR SOLICITUDES DE RETIRO VOLUNTARIO 
     Route::resource('solicitudes_retiro_voluntario', 'RetiroVoluntarioController'); //LISTAR LAS SOLICITUDES DE RETIRO VOLUNTARIO PARA EL TECNICO VCI
      /*FIN MODULO OPERACIONES TECNICO VCI*/
 
@@ -111,7 +121,7 @@ Route::group(['middleware' => ['jwt.verify', 'api']], function ($router) {
     /**FIN SOLICITUDES */
 
     /**SOLICITUDES PDF RETIRO VOLUNTARIO */
-    Route::post('pdfprevisualizacionretiro', 'SolicitudeController@pdfPrevisualizacionRetiro');
+    Route::post('pdfprevisualizacionretiro', 'SolicitudController@pdfPrevisualizacionRetiro');
     Route::post('pdfsolicitudcodigoretiro', 'SolicitudController@pdfSolicitudConCodigoRetiro');
     /**FIN SOLICITUDES */
 
@@ -144,22 +154,11 @@ Route::get('empresas', 'EmpresaController@index');
 Route::resource('unidadmedida', 'UnidadMedidaController');
 Route::resource('actividad', 'ActividadController');
 Route::resource('empresa', 'EmpresaController');
-Route::post('reporteresolucion', 'AprobarController@reporteResolucion'); //resporte resolucion 
+Route::post('reporteresolucion', 'AprobarController@reporteResolucion'); //resporte resolucion incorporacion
+Route::post('reporte_resolucion_modificacion', 'AprobarController@reporteResolucionModificacion'); //resporte resolucion modificacion
+Route::post('reporte_resolucion_ampliacion', 'AprobarController@reporteResolucionAmpliacion'); //resporte resolucion ampliacion de plazo
+Route::post('reporte_resolucion_retiro', 'AprobarController@reporteResolucionRetiro'); //resporte resolucion retiro voluntario
 
-/** ENVIO DE CORREO ELECTRONICO */
-
-Route::get('preregistro', function () {
-    $rs = new stdClass();
-    $rs->razonsocial = 'Acme';
-    $rs->nit = '654874';
-    //$correo = new PreregistroMailable;
-    //return View::make('emails.preregistro');
-    return response()->view('emails.preregistro', compact('rs'));
-    //Mail::to('warigava@gmail.com')->send($correo);
-
-
-    return "Mensaje Enviado";
-});
 
 
 

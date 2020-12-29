@@ -86,7 +86,7 @@ class Solicitud extends Model
     }
 
      /**
-     * ALATAS, BAJAS, MODIFICACIONES PARA LA TABLA SOLICITUDES DE INCORPORACION
+     * ALATAS, BAJAS, MODIFICACIONES PARA SOLICITUDES DE INCORPORACION TECNICO
      */
     public static function abm($auth, $action, $data = [])
     {
@@ -122,7 +122,7 @@ class Solicitud extends Model
     }
 
     /**
-     * ALATAS, BAJAS, MODIFICACIONES PARA LA TABLA SOLICITUDES DE MODIFICACION
+     * ALTAS, BAJAS, MODIFICACIONES PARA SOLICITUDES DE MODIFICACION TECNICO
      */
     public static function abmMod($auth, $action, $data = [])
     {
@@ -137,6 +137,42 @@ class Solicitud extends Model
             return queryErrorParse($e);
         }
     }
+
+    /**
+     * ALTAS, BAJAS, MODIFICACIONES PARA SOLICITUDES DE AMPLIACION DE PLAZO TECNICO
+     */
+    public static function abmAmpliacionPlazoTecnico($auth, $action, $data = [])
+    {
+        try {
+            $sql = "select * from sp_solicitud_ampliacion_plazo_abm(?,?,?) as result";
+            return DB::select($sql, [
+                Json::encode($auth),
+                $action,
+                Json::encode($data)
+            ])[0]->result;
+        } catch (\Illuminate\Database\QueryException $e) {
+            return queryErrorParse($e);
+        }
+    }
+
+    /**
+     * ALTAS, BAJAS, MODIFICACIONES PARA SOLICITUDES DE RETIRO VOLUNTARIO TECNICO
+     */
+    public static function abmRetiroVoluntarioTecnico($auth, $action, $data = [])
+    {
+        try {
+            $sql = "select * from sp_solicitud_retiro_voluntario_abm(?,?,?) as result";
+            return DB::select($sql, [
+                Json::encode($auth),
+                $action,
+                Json::encode($data)
+            ])[0]->result;
+        } catch (\Illuminate\Database\QueryException $e) {
+            return queryErrorParse($e);
+        }
+    }
+
+
 
     /***
      * Previsualizacion de Solicitud  sin codigo generado

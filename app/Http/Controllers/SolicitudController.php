@@ -142,6 +142,46 @@ class SolicitudController extends Controller
         }
     }
 
+     /**
+     * ELIMINAR UNA SOLICITUD DE AMPLIACION DE PLAZO POR PARTE DEL ROL TECNICO
+     */
+    public function eliminarSolicitudAmpliacion($id)
+    {
+        try {
+            $input = [
+                'idsol' => $id
+            ];
+            $auth = getAuthh(request()->path());
+            $resp = Solicitud::abmAmpliacionPlazoTecnico($auth, 'ELIMINAR_SOLICITUD_AMPLIACION', $input);
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
+    }
+
+     /**
+     * ELIMINAR UNA SOLICITUD DE RETIRO VOLUNTARIO POR PARTE DEL ROL TECNICO
+     */
+    public function eliminarSolicitudRetiro($id)
+    {
+        try {
+            $input = [
+                'idsol' => $id
+            ];
+            $auth = getAuthh(request()->path());
+            $resp = Solicitud::abmRetiroVoluntarioTecnico($auth, 'ELIMINAR_SOLICITUD_RETIRO', $input);
+            if (isset($resp->error)) {
+                return response()->json(msgErrorQuery($resp));
+            }
+            return response()->make($resp)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(errorException($e));
+        }
+    }
+
     /**
      * Funcion que se encarga de listar todas las solicitudes de incorporacion generadas
      * con codigo por parte de la empresa.
@@ -300,9 +340,11 @@ class SolicitudController extends Controller
             Storage::disk('temporales')->put($fileName, $reporte);
 
             $dominio = $request->getHost();
+            $archivo = file_get_contents('C:\xampp\htdocs\ritex\public\storage\archivos_ritex\temporales/'. $fileName);
             $sol = [
                 "url" => "http://" . $dominio . "/storage/archivos_ritex/temporales/" . $fileName,
-                "solicitud_pk" => $response['data']
+                "solicitud_pk" => $response['data'],
+                "archivo_base64" => base64_encode($archivo)
             ];
             $resp = [
                 "type" => "success",
@@ -358,15 +400,17 @@ class SolicitudController extends Controller
             $data['solicitud_fecha'] = $this->formatFecha(date('Y-m-d'));
             $data['codigo_solicitud'] = "SRT Nro. 0002/2020";
             //$pdf = PDF::loadView('reportes.solicitud', compact('data', 'resp'));
-            $pdf = PDF::loadView('reportes.solicitud', compact('data'));
+            $pdf = PDF::loadView('reportes.solicitudmodificacion', compact('data'));
             $reporte = $pdf->output();
             $fileName = 'solicitud' . date('YmdHis') . '.pdf';
             Storage::disk('temporales')->put($fileName, $reporte);
 
             $dominio = $request->getHost();
+            $archivo = file_get_contents('C:\xampp\htdocs\ritex\public\storage\archivos_ritex\temporales/'. $fileName);
             $sol = [
                 "url" => "http://" . $dominio . "/storage/archivos_ritex/temporales/" . $fileName,
-                "solicitud_pk" => $response['data']
+                "solicitud_pk" => $response['data'],
+                "archivo_base64" => base64_encode($archivo)
             ];
             $resp = [
                 "type" => "success",
@@ -500,7 +544,7 @@ class SolicitudController extends Controller
             ];
             $resp = [
                 "type" => "success",
-                "message" => "Archivo de solicitud de ampliacion de plazo con Codigo",
+                "message" => "Archivo de solicitud de retiro voluntario con Codigo",
                 "data" => $sol
             ];
             return response()->make(json_encode($resp))->header('Content-Type', 'application/json');

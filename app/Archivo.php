@@ -11,11 +11,56 @@ class Archivo extends Model
     protected $fillable = [];
     protected $timestamp = false;
 
-    //Archivo pdf de solicitud Incorporacion firmada por la empresa
+    //Archivo pdf de solicitud Incorporacion firmado digitalmente por la empresa
     public static function solIncorporacion($auth, $action, $data = []) 
     {
         try {
             $sql = "select * from sp_file_sol_inc_abm(?,?,?) as result";
+            return DB::select($sql, [
+                Json::encode($auth),
+                $action,
+                Json::encode($data)
+            ])[0]->result;
+        } catch (\Illuminate\Database\QueryException $e) {
+            return queryErrorParse($e);
+        }
+    }
+
+    //Archivo pdf de solicitud Modificacion firmado digitalmente por la empresa
+    public static function solModificacion($auth, $action, $data = []) 
+    {
+        try {
+            $sql = "select * from sp_file_sol_mod_abm(?,?,?) as result";
+            return DB::select($sql, [
+                Json::encode($auth),
+                $action,
+                Json::encode($data)
+            ])[0]->result;
+        } catch (\Illuminate\Database\QueryException $e) {
+            return queryErrorParse($e);
+        }
+    }
+
+    //Archivo pdf de solicitud Ampliacion de Plazo firmado digitalmente por la empresa
+    public static function solAmpliacion($auth, $action, $data = []) 
+    {
+        try {
+            $sql = "select * from sp_file_sol_amp_abm(?,?,?) as result";
+            return DB::select($sql, [
+                Json::encode($auth),
+                $action,
+                Json::encode($data)
+            ])[0]->result;
+        } catch (\Illuminate\Database\QueryException $e) {
+            return queryErrorParse($e);
+        }
+    }
+
+    //Archivo pdf de solicitud Retiro Voluntario firmado digitalmente por la empresa
+    public static function solRetiro($auth, $action, $data = []) 
+    {
+        try {
+            $sql = "select * from sp_file_sol_ret_abm(?,?,?) as result";
             return DB::select($sql, [
                 Json::encode($auth),
                 $action,
