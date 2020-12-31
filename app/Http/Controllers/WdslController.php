@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use phpDocumentor\Reflection\PseudoTypes\True_;
 use Spatie\ArrayToXml\ArrayToXml;
 
 class WdslController extends Controller {
@@ -52,9 +53,9 @@ class WdslController extends Controller {
 
             // VALIDAMOS EL FORMULARIO DE ENTRADA SEGUN DOCUMENTACION ADJUNTA PDF
             $validator = Validator::make($request->all(), [
-                'tipoDocumento' => 'required|max:3',
-                'nroDocumento' => 'required|max:15',
-                'lugarExpedicion' => 'size:2',
+                //'tipoDocumento' => 'required|max:3', hoy comentadoi
+                'nit' => 'required|max:15' // cambiamos de nroDocumento a nit
+                //'lugarExpedicion' => 'size:2', hoy comentadoi
             ]);
             if ($validator->fails()) {
                 $erno = [];
@@ -69,10 +70,10 @@ class WdslController extends Controller {
             // GENERACION DEL XML DE CONSULTA DEUDA
             $consultaDeuda = ArrayToXml::convert([
             
-                'tipoDocumento' => $input->tipoDocumento,
-                'nroDocumento' => $input->nroDocumento,
-                'lugarExpedicion' => $input->lugarExpedicion
-            ], 'consultadeuda', true, 'UTF-8', '1.0', [], true);
+                //'tipoDocumento' => $input->tipoDocumento, hoy comentadoi
+                'nit' => $input->nit //cambiamos de nroDocumento a nit
+                //'lugarExpedicion' => $input->lugarExpedicion hoy comentadoi
+            ], 'consultaAdeudoRitex', true, 'UTF-8', '1.0', [], true);
             //dd($consultaDeuda);
 
             // ENCRIPTAMOS LA PETICION
@@ -94,30 +95,41 @@ class WdslController extends Controller {
             }
             // CUSTOMIZAMOS EL RESULTADO DE SALIDA
             $response = ''; // Respuesta en formato XML
-            if (count($respConsultaAdeudo->return) > 0) {
-                // Iteramos la respuesta y concatenamos los resultados XML
-                foreach ($respConsultaAdeudo->return as $rc) {
-                    if (!openssl_public_decrypt(base64_decode($rc), $dec, $this->publicKey)) {
-                        throw new Exception('No se ha podido desencriptar el resultado de la llamada');
+            if(is_array($respConsultaAdeudo->return)) { // Caso que la respuesta sea un Array
+                if (count($respConsultaAdeudo->return) > 0) {
+                    // Iteramos la respuesta y concatenamos los resultados XML
+                    foreach ($respConsultaAdeudo->return as $rc) {
+                        if (!openssl_public_decrypt(base64_decode($rc), $dec, $this->publicKey)) {
+                            throw new Exception('No se ha podido desencriptar el resultado de la llamada');
+                        }
+                        // Concatenamos las respuestas XML
+                        $response .= $dec;
                     }
-                    // Concatenamos las respuestas XML
-                    $response .= $dec;
                 }
+            } else { // En caso que la respuesta no sea un Array
+                if (!openssl_public_decrypt(base64_decode($respConsultaAdeudo->return), $dec, $this->publicKey)) {
+                    throw new Exception('No se ha podido desencriptar el resultado de la llamada');
+                }
+                // Concatenamos las respuestas XML
+                $response .= $dec;
             }
+
 
             // CONVERTIMOS LA RESPUESTA XML EN ARRAY ITERABLE
             $objectXML = simplexml_load_string($response);
-            //dd($objectXML);
-            $responseArray = (object) json_decode(json_encode($objectXML), true);
-            // VERIFICAMOS LOS CODIGOS DE ERROR
-            if (in_array($responseArray->resultado['codError'], ['1', '2', '3'])) {
-                // Se ha generado un error
-                throw new Exception("COD: " . $responseArray->resultado['codError'] . " -> " . $responseArray->resultado['descError']);
+            // dd($objectXML);
+            $responseArray = (array) json_decode(json_encode($objectXML), true);
+
+            // Verificamos si existe un codError
+            if(isset($responseArray['codError'])) {
+                // VERIFICAMOS LOS CODIGOS DE ERROR
+                throw new Exception("COD: " . $responseArray['codError'] . " -> " . $responseArray['descError']);
             }
+            
             // RETORNAMOS LOS DATOS VERIFICADOS
             return response()->json([
                 "response" => true,
-                "message" => $responseArray->resultado
+                "message" => $responseArray
             ]);
 
         } catch (\Exception $e) {

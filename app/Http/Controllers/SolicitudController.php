@@ -473,9 +473,11 @@ class SolicitudController extends Controller
             Storage::disk('temporales')->put($fileName, $reporte);
 
             $dominio = $request->getHost();
+            $archivo = file_get_contents('C:\xampp\htdocs\ritex\public\storage\archivos_ritex\temporales/'. $fileName);
             $sol = [
                 "url" => "http://" . $dominio . "/storage/archivos_ritex/temporales/" . $fileName,
-                "solicitud_pk" => $response['data']
+                "solicitud_pk" => $response['data'],
+                "archivo_base64" => base64_encode($archivo)
             ];
             $resp = [
                 "type" => "success",
@@ -538,9 +540,11 @@ class SolicitudController extends Controller
             Storage::disk('temporales')->put($fileName, $reporte);
 
             $dominio = $request->getHost();
+            $archivo = file_get_contents('C:\xampp\htdocs\ritex\public\storage\archivos_ritex\temporales/'. $fileName);
             $sol = [
                 "url" => "http://" . $dominio . "/storage/archivos_ritex/temporales/" . $fileName,
-                "solicitud_pk" => $response['data']
+                "solicitud_pk" => $response['data'],
+                "archivo_base64" => base64_encode($archivo)
             ];
             $resp = [
                 "type" => "success",
